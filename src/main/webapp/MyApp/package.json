@@ -1,0 +1,12 @@
+{
+  "name": "dbproxy-web",
+  "version": "0.1.0",
+  "description": "dbproxy web grunt",
+  "author": "hbxffj@163.com",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-coffee": "^0.12.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-clean": "^0.6.0"
+  }
+}
