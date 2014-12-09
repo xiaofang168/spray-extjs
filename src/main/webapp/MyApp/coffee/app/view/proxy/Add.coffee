@@ -1,5 +1,6 @@
 Ext.define 'MyApp.view.proxy.Add',
 	extend : 'Ext.form.Panel'
+	requires: ['MyApp.controller.proxy.ProxyController']
 	alias : 'widget.proxyadd'
 	title: '添加数据库代理配置'
 	width: 800
@@ -53,3 +54,12 @@ Ext.define 'MyApp.view.proxy.Add',
 			]
 		]
 	]
+	buttons:[
+			text: '保存'
+			handler : 'save'
+		,
+			text: '关闭'
+			handler: ->
+				@up('proxyadd').hide()
+	]
+	buttonAlign : 'center'

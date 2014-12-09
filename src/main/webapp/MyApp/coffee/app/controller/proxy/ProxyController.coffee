@@ -11,3 +11,5 @@ Ext.define 'MyApp.controller.proxy.ProxyController',
 			closable : true
 			draggable: true
 		proxyaddwin.show()
+	save: ->
+		alert('hello')
