@@ -2,7 +2,6 @@ Ext.define 'MyApp.view.proxy.List',
 	extend : 'Ext.panel.Panel'
 	requires: [
 		'Ext.grid.Panel'#防止sencha app build production 打包运行找不到 gridpanel
-		'MyApp.controller.proxy.ProxyController'
 	]
 	alias : 'widget.proxylist'
 	controller: 'proxy'
