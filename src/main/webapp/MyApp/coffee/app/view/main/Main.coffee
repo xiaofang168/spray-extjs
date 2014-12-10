@@ -24,7 +24,7 @@ Ext.define 'MyApp.view.main.Main',
 		region: 'center'
 		xtype: 'maincenter',
 		items:[
-			title: 'Tab 1'
+			title: '首页'
 			xtype: 'panel'
 			html: '<h2>Content appropriate for the current navigation.</h2>'
 		]
