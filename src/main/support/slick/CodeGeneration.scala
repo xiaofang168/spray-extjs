@@ -18,6 +18,6 @@ object CodeGeneration extends App {
   val pkg = "com.jeff.entities"
   val user = "root"
   val password = "root"
-  scala.slick.codegen.SourceCodeGenerator.main(
-    Array(slickDriver, jdbcDriver, url, outputFolder, pkg, user, password))
+  //scala.slick.codegen.SourceCodeGenerator.main(Array(slickDriver, jdbcDriver, url, outputFolder, pkg, user, password))
+  MySourceCodeGenerator.main(Array(slickDriver, jdbcDriver, url, outputFolder, pkg, "test", user, password,""))
 }
