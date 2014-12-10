@@ -13,17 +13,26 @@ module.exports = (grunt) ->
 				dest: '.',
 				ext: '.js'
 
+		copy:
+			data:
+				expand: true
+				cwd: 'coffee'
+				flatten: false
+				src: 'app/**/*.json'
+				dest: '.'
+
 		clean:
 			app:
 				src: 'app/**/*.js'
 
 		watch:
 			coffee:
-				files: ['coffee/app/**/*.coffee']
-				tasks: ['clean:app','coffee:compile']
+				files: ['coffee/app/**/*.coffee','coffee/app/**/*.json']
+				tasks: ['clean:app','coffee:compile','copy:data']
 
 	grunt.loadNpmTasks 'grunt-contrib-coffee'
 	grunt.loadNpmTasks 'grunt-contrib-watch'
 	grunt.loadNpmTasks 'grunt-contrib-clean'
+	grunt.loadNpmTasks 'grunt-contrib-copy'
 
-	grunt.registerTask 'default',['clean:app','coffee:compile','watch']
+	grunt.registerTask 'default',['clean:app','coffee:compile','copy:data','watch']
