@@ -31,7 +31,7 @@ libraryDependencies ++= {
     "com.typesafe.akka"   %%  "akka-actor"    % akkaV,
     "ch.qos.logback"      %   "logback-classic" % "1.1.2",
     "com.typesafe.slick"  %%  "slick" % "2.1.0",
-    "com.typesafe.slick" %% "slick-codegen" % "2.1.0" % "test",
+    "com.typesafe.slick" %% "slick-codegen" % "2.1.0" % "test" withSources(),
     "mysql" % "mysql-connector-java" % "5.1.6",
     "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
     "org.eclipse.jetty" % "jetty-webapp" % "8.1.10.v20130312",
