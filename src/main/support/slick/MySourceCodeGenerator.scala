@@ -49,14 +49,8 @@ object MySourceCodeGenerator {
         }
 
         // customize code generator
-        val codegen = new SourceCodeGenerator(model) {
-          // override mapped table and class name
-          override def entityName =
-            dbTableName => dbTableName.split("_").map(_.capitalize).mkString("")
-          override def tableName =
-            dbTableName => dbTableName.toLowerCase.toCamelCase
-        }
-
+        val codegen = new SourceCodeGenerator(model)
+    
         codegen.writeToFile(slickDriver, outputFolder, pkg, "Tables", "Tables.scala")
       }
       case _ => {
