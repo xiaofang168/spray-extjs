@@ -56,8 +56,7 @@ Ext.define 'MyApp.view.proxy.Add',
 	]
 	buttons:[
 			text: '保存'
-			handler : ->
-				alert(">>")
+			handler : 'save'
 		,
 			text: '关闭'
 			handler: ->
