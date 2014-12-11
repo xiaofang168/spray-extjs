@@ -11,17 +11,15 @@ Ext.define 'MyApp.view.proxy.List',
 	title: '代理配置列表'
 	closable : true
 	reorderable : true
+	tbar:[
+		xtype: 'button'
+		text: '添加代理配置'
+		icon: '../../../../resources/images/icons/fam/add.png'
+		handler : 'addProxySetting'
+	]
 	items: [
-		xtype: 'toolbar'
-		region: 'north'
-		items: [
-			xtype: 'button'
-			text: '添加代理配置'
-			icon: '../../../../resources/images/icons/fam/add.png'
-			handler : 'addProxySetting'
-		]
-	,
 		xtype: 'gridpanel'
+		reference: 'proxygrid'
 		region: 'center'
 		forceFit: true
 		columns: [
