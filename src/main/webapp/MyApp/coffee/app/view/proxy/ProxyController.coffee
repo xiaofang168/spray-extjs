@@ -31,7 +31,7 @@ Ext.define 'MyApp.view.proxy.ProxyController',
 			Ext.Msg.alert("提示", "只能选择一条记录！")
 		else
 			id = selectionModel.getSelection()[0].data.id
-			console.log id
+			# 根据id查询详细信息
 			proxyeditwin = Ext.create "MyApp.view.proxy.Edit",
 				modal : true
 				region: 'center'
@@ -39,7 +39,19 @@ Ext.define 'MyApp.view.proxy.ProxyController',
 				parent: button.up('proxylist')
 				closable : true	
 				draggable: true
+			proxyeditwin.getForm().setValues(
+				app_name: 'test1'
+				ip: 'localhost'
+			)
 			proxyeditwin.show()
 
 	delete: ->
-		console.log @lookupReference('proxygrid')
+		selectionModel = @lookupReference('proxygrid').getSelectionModel()
+		selectionModelSize = selectionModel.getSelection().length
+		if selectionModelSize is 0
+			Ext.Msg.alert("提示", "请至少选择一条记录！")
+		else
+			deleteIds = []
+			for selection in selectionModel.getSelection()
+				deleteIds.push(selection.data.id)
+			# 根据id删除记录信息
