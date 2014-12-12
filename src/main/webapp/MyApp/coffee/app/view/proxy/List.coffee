@@ -45,6 +45,7 @@ Ext.define 'MyApp.view.proxy.List',
 		@items = [
 			xtype: 'gridpanel'
 			forceFit: true
+			loadMask: true #读取数据遮罩和提示,Loading....
 			selType: 'checkboxmodel'
 			selModel:
 				injectCheckbox: 0
@@ -60,19 +61,18 @@ Ext.define 'MyApp.view.proxy.List',
 			,
 				hidden : true
 				dataIndex: 'id'
+				hideable: false
 			,
 				text: '注册应用名称'
 				sortable: true
 				dataIndex: 'app_name'
-				width: 2
+				#menuDisabled: true
 			,
 				text: '注册应用ip地址'
 				dataIndex: 'ip'
-				width: 5
 			,
 				text: '代理服务是否启用'
 				dataIndex: 'is_enable'
-				width: 2
 			]
 			store: Ext.create('MyApp.store.proxy.Setting')
 		]
