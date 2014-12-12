@@ -15,7 +15,7 @@ Ext.define 'MyApp.view.proxy.List',
 		xtype: 'button'
 		text: '添加'
 		#icon: '../../../../resources/images/icons/fam/add.png'
-		glyph: 0xf055
+		glyph: 0xf0fe
 		handler : 'addProxySetting'
 	,
 		xtype : 'tbspacer'
@@ -33,6 +33,13 @@ Ext.define 'MyApp.view.proxy.List',
 		text: '删除'
 		glyph: 0xf00d
 		handler: 'delete'
+	,
+		xtype: 'tbfill'
+	,
+		xtype: 'button'
+		text: '导出Excel'
+		glyph: 0xf1c3
+		handler: 'exportExcel'
 	]
 	initComponent: ->
 		@items = [
