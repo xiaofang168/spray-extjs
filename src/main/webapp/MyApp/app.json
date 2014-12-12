@@ -44,9 +44,12 @@
      *      ]
      */
     "requires": [
-    	"ext-theme-classic"
+    	"ext-theme-classic",
+        "ext-locale"
     ],
-
+    
+    "locale": "zh_CN",
+    
     /**
      * Sass configuration properties.
      */
