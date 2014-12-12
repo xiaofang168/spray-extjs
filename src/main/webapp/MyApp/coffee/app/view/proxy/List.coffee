@@ -13,17 +13,48 @@ Ext.define 'MyApp.view.proxy.List',
 	reorderable : true
 	tbar:[
 		xtype: 'button'
-		text: '添加代理配置'
-		icon: '../../../../resources/images/icons/fam/add.png'
+		text: '添加'
+		#icon: '../../../../resources/images/icons/fam/add.png'
+		glyph: 0xf055
 		handler : 'addProxySetting'
+	,
+		xtype : 'tbspacer'
+		width: 20
+	,
+		xtype: 'button'
+		text: '修改'
+		glyph: 0xf044
+		handler: ''
+	,
+		xtype : 'tbspacer'
+		width: 20
+	,
+		xtype: 'button'
+		text: '删除'
+		glyph: 0xf00d
+		handler: ''
 	]
 	items: [
 		xtype: 'gridpanel'
+		selType: 'checkboxmodel'
+		selModel:
+			injectCheckbox: 0
+			mode: 'SIMPLE' #"SINGLE"/"SIMPLE"/"MULTI"
+			checkOnly: true
 		reference: 'proxygrid'
 		region: 'center'
 		forceFit: true
 		columns: [
+			xtype:'rownumberer'
+			sortable: false
+			width: 50
+			text:'序号'
+			sortable: false
+			locked: true
+		,
 			text: '注册应用名称'
+			sortable: true
+			#text: '注册应用名称'
 			dataIndex: 'app_name'
 		,
 			text: '注册应用ip地址'
