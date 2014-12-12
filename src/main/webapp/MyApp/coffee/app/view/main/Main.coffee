@@ -31,4 +31,4 @@ Ext.define 'MyApp.view.main.Main',
 	]
 	initComponent: ->
 		Ext.setGlyphFontFamily('FontAwesome')
-		this.callParent()
+		@callParent()
