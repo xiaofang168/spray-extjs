@@ -28,11 +28,11 @@ class MyServiceActor extends Actor with MyService with CustomerRequestCreator {
 trait MyService extends HttpService {
 
   // 合同进程路由定义
-  val contractStatusRoute = path("contractstatus") {
+  val contractStatusRoute = path("proxy") {
     get {
       respondWithMediaType(MediaTypes.`application/json`) {
         parameterMap { conditions =>
-          handleContractStatusRequest(ContractStatusAction.Save())
+          handleContractStatusRequest(ContractStatusAction.All)
         }
       }
     }
