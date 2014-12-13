@@ -3,6 +3,7 @@
         "http://java.sun.com/dtd/web-app_2_4.dtd">
 <web-app>
 
+    <context-root>/</context-root>
 	<display-name>spray-servlet-webapp</display-name>
 	<description>A simple web-application example using Spray and spray-servlet.</description>
 
