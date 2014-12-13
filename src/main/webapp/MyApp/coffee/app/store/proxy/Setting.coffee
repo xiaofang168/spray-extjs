@@ -5,7 +5,7 @@ Ext.define 'MyApp.store.proxy.Setting',
 	alias: 'settingstore'
 	proxy:
 		type: 'ajax'
-		url: 'app/store/proxy/users.json'
+		url:  "#{MyApp.context}app/proxy"
 		reader:
 			type: 'json'
 			rootProperty: 'users'
