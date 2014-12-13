@@ -65,14 +65,14 @@ Ext.define 'MyApp.view.proxy.List',
 			,
 				text: '注册应用名称'
 				sortable: true
-				dataIndex: 'app_name'
+				dataIndex: 'appName'
 				#menuDisabled: true
 			,
 				text: '注册应用ip地址'
 				dataIndex: 'ip'
 			,
 				text: '代理服务是否启用'
-				dataIndex: 'is_enable'
+				dataIndex: 'isEnable'
 			]
 			store: Ext.create('MyApp.store.proxy.Setting')
 		]
