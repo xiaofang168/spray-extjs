@@ -5,4 +5,5 @@ Ext.define 'MyApp.Application',
 		# TODO: add global / shared stores here
 	]
 	launch: ->
+		MyApp.context = '/'
 		# TODO - Launch the application
