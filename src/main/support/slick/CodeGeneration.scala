@@ -14,10 +14,10 @@ object CodeGeneration extends App {
   val slickDriver = "scala.slick.driver.MySQLDriver"
   val jdbcDriver = "com.mysql.jdbc.Driver"
   val url = "jdbc:mysql://localhost:3306/test"
-  val outputFolder = "E:/workspaces/home/spray-extjs/src/main/scala"
+  val outputFolder = "E:/slick/code"
   val pkg = "com.jeff.entities"
   val user = "root"
   val password = "root"
   //scala.slick.codegen.SourceCodeGenerator.main(Array(slickDriver, jdbcDriver, url, outputFolder, pkg, user, password))
-  MySourceCodeGenerator.main(Array(slickDriver, jdbcDriver, url, outputFolder, pkg, "test", user, password,""))
+  MySourceCodeGenerator.main(Array(slickDriver, jdbcDriver, url, outputFolder, pkg, "proxy", user, password))
 }
