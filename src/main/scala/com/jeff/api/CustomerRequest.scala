@@ -1,6 +1,6 @@
 package com.jeff.api
 
-import akka.actor.{OneForOneStrategy, ActorRef, Props, Actor}
+import akka.actor.{ OneForOneStrategy, ActorRef, Props, Actor }
 import com.jeff.api.CustomerRequest.WithProps
 import akka.actor.SupervisorStrategy.Stop
 import scala.concurrent.duration._
@@ -26,9 +26,8 @@ trait CustomerRequest extends Actor with Json4sSupport {
   target ! requestMessage
 
   def receive = {
-    case s: String => complete(s)
+    case e: AnyRef => complete(e)
   }
-
 
   def complete[T <: AnyRef](obj: T) = {
     requestContext.complete(obj)
@@ -42,7 +41,6 @@ trait CustomerRequest extends Actor with Json4sSupport {
         Stop
       }
     }
-
 
 }
 
