@@ -25,7 +25,7 @@ import com.jeff.services.BaseService
  * @Date: 2014年11月29日
  * @version: $Rev$
  */
-class ContractStatusServiceTest{
+class ContractStatusServiceTest {
 
   def db = new DBConnection(SlickDBDriver.getDriver).dbObject
 
@@ -38,17 +38,24 @@ class ContractStatusServiceTest{
     Assert.assertTrue(tests.size > 0)
   }
 
-  def query(){
-    
+  def query() {
+
   }
-  
+
   @Test
   def testAll() {
-    val list = db.withSession { implicit session =>
+    val list: List[Tables.TestRow] = db.withSession { implicit session =>
       Tables.Test.list
     }
     val s = list.map(obj => { obj.id + ", " + obj.name.getOrElse("") }).mkString("\n")
     println(s)
+  }
+
+  @Test
+  def testProxyAll() {
+    val list: List[Tables.ProxyRow] = db.withSession { implicit session =>
+      Tables.Proxy.list
+    }
   }
 
   @Test
