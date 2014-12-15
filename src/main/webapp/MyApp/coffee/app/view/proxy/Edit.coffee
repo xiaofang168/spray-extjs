@@ -28,7 +28,7 @@ Ext.define 'MyApp.view.proxy.Edit',
 			items:[
 				xtype:'textfield'
 				fieldLabel:'应用名称'
-				name:'app_name'
+				name:'appName'
 			,
 				xtype:'textfield'
 				fieldLabel:'应用名称'
@@ -48,7 +48,7 @@ Ext.define 'MyApp.view.proxy.Edit',
 			items: [
 				xtype:'textfield'
 				fieldLabel:'服务是否启用'
-				name:'is_enable'
+				name:'isEnable'
 				labelWidth: 100
 				width: 140
 			]
