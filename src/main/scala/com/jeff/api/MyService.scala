@@ -52,14 +52,14 @@ trait MyService extends HttpService {
         respondWithMediaType(MediaTypes.`application/json`) {
           handleContractStatusRequest(ContractStatusAction.Get(id.toInt))
         }
-      }
-      put {
-        respondWithMediaType(MediaTypes.`application/json`) {
-          entity(as[Tables.ProxyRow]) { proxy =>
-            handleContractStatusRequest(ContractStatusAction.Update(id.toInt, proxy))
-          }
-        }
       } ~
+        put {
+          respondWithMediaType(MediaTypes.`application/json`) {
+            entity(as[Tables.ProxyRow]) { proxy =>
+              handleContractStatusRequest(ContractStatusAction.Update(id.toInt, proxy))
+            }
+          }
+        } ~
         delete {
           respondWithMediaType(MediaTypes.`application/json`) {
             handleContractStatusRequest(ContractStatusAction.Delete(id.toInt))
