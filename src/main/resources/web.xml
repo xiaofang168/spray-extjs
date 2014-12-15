@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_4.dtd">
+<web-app>
+
+    <context-root>/</context-root>
+	<display-name>spray-servlet-webapp</display-name>
+	<description>A simple web-application example using Spray and spray-servlet.</description>
+
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>spray-servlet-webapp.root</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>spray.servlet.Initializer</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>SprayConnectorServlet</servlet-name>
+		<servlet-class>spray.servlet.Servlet30ConnectorServlet</servlet-class>
+		<async-supported>true</async-supported>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SprayConnectorServlet</servlet-name>
+		<url-pattern>/app/*</url-pattern>
+	</servlet-mapping>
+</web-app>
