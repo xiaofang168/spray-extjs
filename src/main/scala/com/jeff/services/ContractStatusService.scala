@@ -10,19 +10,35 @@ import scala.slick.driver.MySQLDriver.simple._
  */
 trait ContractStatusService extends BaseService {
 
-  def getById(id: Long) = {
-
+  def getById(id: Int) = {
+    db.withSession { implicit session =>
+      Tables.Proxy.filter(_.id === id).first
+    }
   }
 
-  def update() = {
-
+  def update(proxy: Tables.ProxyRow) = {
+    db.withSession { implicit session =>
+      Tables.Proxy.update(proxy)
+    }
   }
 
-  def delete() = {
-
+  def delete(id: Int) = {
+    db.withSession { implicit session =>
+      Tables.Proxy.filter(_.id === id).delete
+    }
   }
 
-  def save() = "test"
+  def save(proxy: Tables.ProxyRow): Int = {
+    db.withSession { implicit session =>
+      Tables.Proxy.insert(proxy)
+    }
+  }
+
+  def saveOrUpdate(proxy: Tables.ProxyRow): Int = {
+    db.withSession { implicit session =>
+      Tables.Proxy.insertOrUpdate(proxy)
+    }
+  }
 
   def all(): List[Tables.ProxyRow] = {
     db.withSession { implicit session =>
