@@ -19,6 +19,7 @@ import com.jeff.entities.Tables
 import scala.slick.lifted.TableQuery
 import scala.slick.driver.MySQLDriver.simple._
 import com.jeff.services.BaseService
+import com.jeff.services.ContractStatusService
 
 /**
  * @author: <a href="mailto:hbxffj@163.com">方杰</a>
@@ -28,6 +29,8 @@ import com.jeff.services.BaseService
 class ContractStatusServiceTest {
 
   def db = new DBConnection(SlickDBDriver.getDriver).dbObject
+
+  val service = new ContractStatusService {}
 
   @Test
   def testAllWithSql() {
@@ -56,6 +59,30 @@ class ContractStatusServiceTest {
     val list: List[Tables.ProxyRow] = db.withSession { implicit session =>
       Tables.Proxy.list
     }
+  }
+
+  @Test
+  def testGetProxy() {
+    val id = 5
+    val res = db.withSession { implicit session =>
+      Tables.Proxy.filter(_.id === id).first
+    }
+    println(res)
+  }
+
+  @Test
+  def testSaveProxy() {
+    val proxy = Tables.ProxyRow(5, Option("aa"), Option("aa"), Option("aa"))
+    val res = db.withSession { implicit session =>
+      Tables.Proxy.insertOrUpdate(proxy)
+    }
+    println(res)
+  }
+
+  @Test
+  def testDeleteProxy() {
+    val res = service.delete(5)
+    println(res)
   }
 
   @Test
