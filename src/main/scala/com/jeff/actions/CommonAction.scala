@@ -7,10 +7,10 @@ import com.jeff.api.RequestMessage
  */
 private[actions] trait CommonAction {
 
-  case class Delete(id:Long) extends  RequestMessage
+  case class Delete(id: Int) extends RequestMessage
 
-  case class Get(id:Long) extends  RequestMessage
+  case class Get(id: Int) extends RequestMessage
 
-  case object All extends  RequestMessage
+  case object All extends RequestMessage
 
 }
