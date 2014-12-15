@@ -23,7 +23,7 @@ import java.io.File
  */
 object WebStart {
 
-  val logger = LoggerFactory.getLogger(this.getClass())
+  val logger = LoggerFactory.getLogger(getClass())
 
   def main(args: Array[String]) {
     start
@@ -31,14 +31,18 @@ object WebStart {
 
   def start() {
     val server = new Server(Constant.port)
-    val rootPath = this.getClass().getClassLoader().getResource("").getPath()
+    val rootPath = getClass().getResource("/web.xml").getPath().dropRight(8)
     val path = new File(rootPath).getPath()
-    val webPath = if (path.lastIndexOf("\\") == -1) path.substring(0,path.lastIndexOf("/")) else path.substring(0,path.lastIndexOf("\\"))
-    logger.info("web路径："+s"$webPath\\webapp")
+    logger.info("config file路径：" + s"$path")
+    val webPath = if (path.lastIndexOf("\\") == -1) path.substring(0, path.lastIndexOf("/")) else path.substring(0, path.lastIndexOf("\\"))
+    logger.info("web路径：" + s"$webPath\\webapp")
     val webapp = new WebAppContext(s"$webPath\\webapp", Constant.webContext)
+    val webxmlLocation = getClass().getResource("/web.xml").toString()
+    logger.info("web.xml:" + webxmlLocation)
+    webapp.setDescriptor(webxmlLocation)
     server.setHandler(webapp)
     server.start()
     server.join()
   }
-  
+
 }
