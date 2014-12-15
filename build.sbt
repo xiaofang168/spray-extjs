@@ -26,6 +26,7 @@ libraryDependencies ++= {
   Seq(
     "io.spray"            %   "spray-can"     % sprayV  withSources(),
     "io.spray"            %   "spray-servlet" % sprayV,
+    "io.spray" 			  %%  "spray-json"    % "1.2.6" withSources(),
     "io.spray"            %   "spray-routing" % sprayV,
     "org.json4s"          %%  "json4s-native"      % "3.2.4",
     "com.typesafe.akka"   %%  "akka-actor"    % akkaV,
