@@ -14,8 +14,7 @@ Ext.define 'MyApp.view.main.MainController',
 			@getView().getViewModel().set('name' ,"修改后的title")
 	onMainMenuClick:(menuitem) ->
 		maincenter = @getView().down('maincenter')
-		maincenter.setActiveTab(maincenter.add(
+		maincenter.setActiveTab maincenter.add
 			xtype : menuitem.view
-		))
 
 
