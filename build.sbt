@@ -42,7 +42,7 @@ libraryDependencies ++= {
 
 excludeFilter in unmanagedResources := HiddenFileFilter || "web"
 
-mainClass in (Compile, run) := Some("com.jeff.Boot")
+mainClass in (Compile, run) := Some("com.jeff.WebStart")
 
 seq(warSettings :_*)
 
