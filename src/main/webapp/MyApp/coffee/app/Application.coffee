@@ -1,5 +1,6 @@
 class MyApp
 	@context = '/'
+	@pageSize = 5
 Ext.define 'MyApp.Application',
 	extend: 'Ext.app.Application'
 	name: 'MyApp'
