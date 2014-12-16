@@ -18,7 +18,7 @@ trait ContractStatusService extends BaseService {
 
   def update(proxy: Tables.ProxyRow) = {
     db.withSession { implicit session =>
-      Tables.Proxy.update(proxy)
+      Tables.Proxy.filter(_.id === proxy.id).update(proxy)
     }
   }
 
