@@ -7,6 +7,7 @@ Ext.define 'MyApp.view.proxy.List',
 		'Ext.toolbar.Fill'
 		'Ext.selection.CheckboxModel'
 		'MyApp.store.proxy.Setting'
+		'Ext.toolbar.Paging'
 		'MyApp.view.proxy.ProxyController'
 	]
 	alias : 'widget.proxylist'
@@ -48,6 +49,7 @@ Ext.define 'MyApp.view.proxy.List',
 		handler: 'exportExcel'
 	]
 	initComponent: ->
+		settingstore = Ext.create('MyApp.store.proxy.Setting')
 		@items = [
 			xtype: 'gridpanel'
 			forceFit: true
@@ -80,6 +82,13 @@ Ext.define 'MyApp.view.proxy.List',
 				text: '代理服务是否启用'
 				dataIndex: 'isEnable'
 			]
-			store: Ext.create('MyApp.store.proxy.Setting')
+			store: settingstore
+			dockedItems: [
+				xtype: 'pagingtoolbar'
+				store: settingstore 
+				dock: 'bottom'
+				pageSize: 5
+				displayInfo: true
+			]
 		]
 		@callParent()
