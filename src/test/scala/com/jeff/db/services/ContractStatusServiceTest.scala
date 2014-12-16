@@ -84,6 +84,13 @@ class ContractStatusServiceTest {
     val res = service.delete(5)
     println(res)
   }
+  
+  @Test
+  def testUpdateProxy() {
+    val proxy = Tables.ProxyRow(22, Option("aa"), Option("aa"), Option("aa"))
+    service.update(proxy)
+  }
+
 
   @Test
   def testSaveWithSql() {
