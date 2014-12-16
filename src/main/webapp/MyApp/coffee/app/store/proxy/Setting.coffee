@@ -12,6 +12,8 @@ Ext.define 'MyApp.store.proxy.Setting',
 	proxy:
 		type: 'ajax'
 		url: "#{MyApp.context}app/proxy"
+		# if override actionMethods use post get(read) datas
+		#paramsAsJson: true
 		reader:
 			type: 'json'
 			rootProperty: 'users'
