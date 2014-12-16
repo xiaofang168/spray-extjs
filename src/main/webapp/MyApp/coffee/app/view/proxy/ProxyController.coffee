@@ -20,21 +20,34 @@ Ext.define 'MyApp.view.proxy.ProxyController',
 		addview = @getView()
 		gridpanel = addview.parent.down('gridpanel')
 		proxy = addview.getForm().getValues()
-		proxy.id = 0
-		Ext.Ajax.request
-				url: "#{MyApp.context}app/proxy"
-				method: 'post'
-				jsonData: proxy
-				success: (response, opts) ->
-					Ext.Msg.alert("提示", "添加成功！")
-					addview.hide()
-					gridpanel.getStore().reload()
-				failure: (response, opts) ->
-					Ext.Msg.alert("提示", "添加失败！")
-					console.log("server-side failure with status code #{response.status}")
+		proxyModel = Ext.create('MyApp.model.proxy.Setting', proxy)
+		proxyModel.set('id', 0)
+		proxyModel.save
+			success: (record, operation) ->
+				Ext.Msg.alert("提示", "添加成功！")
+				proxyModel.set('appName','343')
+				proxyModel.save()
+				addview.hide()
+				gridpanel.getStore().reload()
+			failure: (record, operation) ->
+				Ext.Msg.alert("提示", "添加失败！")
 
 	update: ->
-		alert('update')
+		updateview = @getView()
+		gridpanel = updateview.parent.down('gridpanel')
+		proxy = updateview.getForm().getValues()
+		proxy.id = parseInt(proxy.id)
+		proxyModel = Ext.create 'MyApp.model.proxy.Setting',
+			id: proxy.id
+		for k,v of proxy
+			proxyModel.set(k,v)
+		proxyModel.save
+			success: (record, operation) ->
+				Ext.Msg.alert("提示", "修改成功！")
+				updateview.hide()
+				gridpanel.getStore().reload()
+			failure: (record, operation) ->
+				Ext.Msg.alert("提示", "修改失败！")
 
 	edit: (button)->
 		selectionModel = button.up('proxylist').down('gridpanel').getSelectionModel()
@@ -53,14 +66,17 @@ Ext.define 'MyApp.view.proxy.ProxyController',
 				parent: button.up('proxylist')
 				closable : true	
 				draggable: true
-			Ext.Ajax.request
-				url: "#{MyApp.context}app/proxy/#{id}"
-				method: 'get'
-				success: (response, opts) ->
-					obj = Ext.decode(response.responseText)
-					proxyeditwin.getForm().setValues(obj)
-				failure: (response, opts) ->
-					console.log("server-side failure with status code #{response.status}")
+			MyApp.model.proxy.Setting.load id,
+				success: (store) ->
+					proxyeditwin.getForm().setValues(store.data)
+			#Ext.Ajax.request
+			#	url: "#{MyApp.context}app/proxy/#{id}"
+			#	method: 'get'
+			#	success: (response, opts) ->
+			#		obj = Ext.decode(response.responseText)
+			#		proxyeditwin.getForm().setValues(obj)
+			#	failure: (response, opts) ->
+			#		console.log("server-side failure with status code #{response.status}")
 			proxyeditwin.show()
 
 	delete: ->
