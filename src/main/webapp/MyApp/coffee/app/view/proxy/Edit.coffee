@@ -26,6 +26,10 @@ Ext.define 'MyApp.view.proxy.Edit',
 			columnWidth:.35 #该列在整行中所占百分比 
 			border:false 
 			items:[
+				xtype:'numberfield'
+				name:'id'
+				hidden: true
+			,
 				xtype:'textfield'
 				fieldLabel:'应用名称'
 				name:'appName'
