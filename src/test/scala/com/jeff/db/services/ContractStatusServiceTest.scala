@@ -20,6 +20,7 @@ import scala.slick.lifted.TableQuery
 import scala.slick.driver.MySQLDriver.simple._
 import com.jeff.services.BaseService
 import com.jeff.services.ContractStatusService
+import com.jeff.entities.Query._
 
 /**
  * @author: <a href="mailto:hbxffj@163.com">方杰</a>
@@ -71,6 +72,35 @@ class ContractStatusServiceTest {
   }
 
   @Test
+  def testSearch() {
+    val res = db.withSession { implicit session =>
+      Tables.Proxy.filter(p => p.id >= 18 && p.appName === "app1").list
+    }
+    println(res)
+
+  }
+
+  @Test
+  def testSearchEq() {
+    val res = service.search(0, 10, Array[Sort](), Array[Filter](Filter("appName", "app1", Some(Expression.EQ))))
+    println(res.size)
+  }
+
+  @Test
+  def testSearchLike() {
+    val filters = Array[Filter](Filter("appName", "app1", Some(Expression.LIKE)), Filter("ip", "localhost", Some(Expression.EQ)))
+    val res = service.search(0, 10, Array[Sort](), filters)
+    println(res.size)
+  }
+
+  @Test
+  def testSearchPage() {
+    val filters = Array[Filter](Filter("appName", "app", Some(Expression.LIKE)))
+    val res = service.search(0, 3, Array[Sort](), filters)
+    println(res.size)
+  }
+
+  @Test
   def testSaveProxy() {
     val proxy = Tables.ProxyRow(5, Option("aa"), Option("aa"), Option("aa"))
     val res = db.withSession { implicit session =>
@@ -84,13 +114,12 @@ class ContractStatusServiceTest {
     val res = service.delete(5)
     println(res)
   }
-  
+
   @Test
   def testUpdateProxy() {
     val proxy = Tables.ProxyRow(22, Option("aa"), Option("aa"), Option("aa"))
     service.update(proxy)
   }
-
 
   @Test
   def testSaveWithSql() {
