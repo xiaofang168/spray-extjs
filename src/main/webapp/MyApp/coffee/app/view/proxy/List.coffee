@@ -50,6 +50,12 @@ Ext.define 'MyApp.view.proxy.List',
 	]
 	initComponent: ->
 		settingstore = Ext.create('MyApp.store.proxy.Setting')
+		#idFilter = Ext.create 'Ext.util.Filter',
+		#	property: 'id'
+		#	value: 1
+		#	expression: '='
+		#settingstore.load
+		#	filters: [ idFilter ]
 		@items = [
 			xtype: 'gridpanel'
 			forceFit: true
