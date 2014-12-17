@@ -87,7 +87,6 @@ Ext.define 'MyApp.view.proxy.List',
 				xtype: 'pagingtoolbar'
 				store: settingstore 
 				dock: 'bottom'
-				pageSize: 5
 				displayInfo: true
 			]
 		]
