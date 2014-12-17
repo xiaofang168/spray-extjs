@@ -9,6 +9,7 @@
 		</encoder>
 	</appender>
 	<logger name="com.jeff" level="DEBUG" />
+	<logger name="scala.slick" level="SQL" />
 	<root level="INFO">
 		<appender-ref ref="CONSOLE" />
 	</root>
