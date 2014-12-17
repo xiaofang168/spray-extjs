@@ -50,12 +50,33 @@ Ext.define 'MyApp.view.proxy.List',
 	]
 	initComponent: ->
 		settingstore = Ext.create('MyApp.store.proxy.Setting')
-		#idFilter = Ext.create 'Ext.util.Filter',
-		#	property: 'id'
-		#	value: 1
-		#	expression: '='
-		#settingstore.load
-		#	filters: [ idFilter ]
+		idFilter = Ext.create 'Ext.util.Filter',
+			property: 'id'
+			value: 1
+			expression: '='
+		ageFilter = Ext.create 'Ext.util.Filter',
+			property: 'age'
+			value: 20
+			expression: '>'
+		
+		age2Filter = Ext.create 'Ext.util.Filter',
+			property: 'age'
+			value: 10
+			expression: '<'
+		
+		orAgeFilter = Ext.create 'Ext.util.Filter',
+			property: '$or'
+			value:[
+				property: 'age'
+				value: 10
+				expression: '<'
+			,
+				property: 'age'
+				value: 20
+				expression: '>'
+			]
+		settingstore.load
+			filters: [idFilter,orAgeFilter]
 		@items = [
 			xtype: 'gridpanel'
 			forceFit: true
