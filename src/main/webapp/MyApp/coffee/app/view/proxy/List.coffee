@@ -41,6 +41,14 @@ Ext.define 'MyApp.view.proxy.List',
 		glyph: 0xf00d
 		handler: 'delete'
 	,
+		xtype : 'tbspacer'
+		width: 20
+	,
+		xtype: 'button'
+		text: '详情测试'
+		glyph: 0xf00d
+		handler: 'show'
+	,
 		xtype: 'tbfill'
 	,
 		xtype: 'button'
