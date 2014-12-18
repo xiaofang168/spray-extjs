@@ -100,3 +100,12 @@ Ext.define 'MyApp.view.proxy.ProxyController',
 							proxygrid.getStore().reload()
 						failure: (response, opts) ->
 							console.log("server-side failure with status code #{response.status}")
+	
+	show: ->
+		proxydetailwin = Ext.create "MyApp.view.proxy.Detail",
+			modal : true
+			region: 'center'
+			floating: true
+			closable : true	
+			draggable: true
+		proxydetailwin.show()
