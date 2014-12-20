@@ -13,8 +13,6 @@ private[actions] trait CommonAction {
 
   case class Get(id: Int) extends RequestMessage
 
-  case object All extends RequestMessage
-
-  case class Search($offset: Option[Int] = Some(0), $limit: Option[Int] = Some(20), $sort: Option[Array[Sort]] = Some(Array[Sort](Sort("id", Order.DESC))), $filter: Option[Filter])
+  case class All(search: Search) extends RequestMessage
 
 }

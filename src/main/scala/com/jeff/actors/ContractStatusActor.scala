@@ -15,11 +15,8 @@ class ContractStatusActor extends Actor with ContractStatusService {
     case ContractStatusAction.Update(id, proxy) => sender ! update(proxy)
     case ContractStatusAction.Delete(id) => sender ! delete(id)
     case ContractStatusAction.Save(proxy) => sender ! save(proxy)
-    case ContractStatusAction.All => sender ! all()
-    case ContractStatusAction.Search(offset, limit, sort, filter) =>{
-      
-      
-    }
+    case ContractStatusAction.All(search) => sender ! all()
+
   }
 
 }
