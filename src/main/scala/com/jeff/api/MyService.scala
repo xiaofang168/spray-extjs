@@ -35,7 +35,8 @@ trait MyService extends HttpService {
     get {
       respondWithMediaType(MediaTypes.`application/json`) {
         parameterMap { conditions =>
-          handleContractStatusRequest(ContractStatusAction.All)
+          // 构造查询条件
+          handleContractStatusRequest(ContractStatusAction.All(null))
         }
       }
     } ~
