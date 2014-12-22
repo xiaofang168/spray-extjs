@@ -31,25 +31,45 @@ trait ContractStatusService extends BaseService {
     }
   }
 
-  def search(offset: Int, limit: Int, sort: Array[Sort], filter: Array[Filter]) = {
+  def search(offset: Option[Int], limit: Option[Int], sort: Option[Array[Sort]], filter: Option[Array[Filter]]) = {
 
-    val (id, idExpression): (Option[Int], Option[Expression.Value]) = filter.find(_.property.equals("id")) match {
-      case Some(filter) => (Some(filter.value.toString.toInt), filter.expression)
+    val (id, idExpression): (Option[Int], Option[Expression.Value]) = filter match {
+      case Some(filter) => {
+        filter.find(_.property.equals("id")) match {
+          case Some(filter) => (Some(filter.value.toString.toInt), filter.expression)
+          case None => (None, None)
+        }
+      }
       case None => (None, None)
     }
 
-    val (appName, appNameExpression): (Option[String], Option[Expression.Value]) = filter.find(_.property.equals("appName")) match {
-      case Some(filter) => (Some(filter.value.toString), filter.expression)
+    val (appName, appNameExpression): (Option[String], Option[Expression.Value]) = filter match {
+      case Some(filter) => {
+        filter.find(_.property.equals("appName")) match {
+          case Some(filter) => (Some(filter.value.toString), filter.expression)
+          case None => (None, None)
+        }
+      }
       case None => (None, None)
     }
 
-    val (ip, ipExpression): (Option[String], Option[Expression.Value]) = filter.find(_.property.equals("ip")) match {
-      case Some(filter) => (Some(filter.value.toString), filter.expression)
+    val (ip, ipExpression): (Option[String], Option[Expression.Value]) = filter match {
+      case Some(filter) => {
+        filter.find(_.property.equals("ip")) match {
+          case Some(filter) => (Some(filter.value.toString), filter.expression)
+          case None => (None, None)
+        }
+      }
       case None => (None, None)
     }
 
-    val (isEnable, isEnableExpression): (Option[String], Option[Expression.Value]) = filter.find(_.property.equals("isEnable")) match {
-      case Some(filter) => (Some(filter.value.toString), filter.expression)
+    val (isEnable, isEnableExpression): (Option[String], Option[Expression.Value]) = filter match {
+      case Some(filter) => {
+        filter.find(_.property.equals("isEnable")) match {
+          case Some(filter) => (Some(filter.value.toString), filter.expression)
+          case None => (None, None)
+        }
+      }
       case None => (None, None)
     }
 
@@ -68,7 +88,7 @@ trait ContractStatusService extends BaseService {
             case _ => _.appName === ip
           }
         }.filteredBy(isEnable)(_.isEnable === isEnable)
-        .query.drop(offset).take(limit).list
+        .query.drop(offset.getOrElse(0)).take(limit.getOrElse(5)).list
     }
 
   }
