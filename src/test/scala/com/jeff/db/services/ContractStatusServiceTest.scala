@@ -82,21 +82,28 @@ class ContractStatusServiceTest {
 
   @Test
   def testSearchEq() {
-    val res = service.search(0, 10, Array[Sort](), Array[Filter](Filter("appName", "app1", Some(Expression.EQ))))
+    val res = service.search(Some(0), Some(10), Some(Array[Sort]()), Some(Array[Filter](Filter("appName", "app1", Some(Expression.EQ)))))
     println(res.size)
   }
 
   @Test
   def testSearchLike() {
     val filters = Array[Filter](Filter("appName", "app1", Some(Expression.LIKE)), Filter("ip", "localhost", Some(Expression.EQ)))
-    val res = service.search(0, 10, Array[Sort](), filters)
+    val res = service.search(Some(0), Some(10), Some(Array[Sort]()), Some(filters))
+    println(res.size)
+  }
+
+  @Test
+  def testSearchSortNull() {
+    val filters = Array[Filter](Filter("appName", "app1", Some(Expression.LIKE)), Filter("ip", "localhost", Some(Expression.EQ)))
+    val res = service.search(Some(0), Some(2), None, None)
     println(res.size)
   }
 
   @Test
   def testSearchPage() {
     val filters = Array[Filter](Filter("appName", "app", Some(Expression.LIKE)))
-    val res = service.search(0, 3, Array[Sort](), filters)
+    val res = service.search(Some(0), Some(3), Some(Array[Sort]()), Some(filters))
     println(res.size)
   }
 

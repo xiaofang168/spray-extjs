@@ -9,6 +9,7 @@ package com.jeff.api
 
 import org.junit.Test
 import com.jeff.entities.Query
+import org.junit.Assert
 
 /**
  * @author: <a href="mailto:hbxffj@163.com">方杰</a>
@@ -20,12 +21,13 @@ class RequestHelperTest {
   @Test
   def testGetSearch() {
     val $sort = """[{"property":"id","direction":"DESC"}]"""
-    val $filter = """[{"property":"id","value":1,"expression":"="},{"property":"$or","value":[{"property":"age","value":10,"expression":"<"},{"property":"age","value":20,"expression":">"}]}]"""
+    val $filter = """[{"property":"id","value":1,"expression":"$eq"},{"property":"$or","value":[{"property":"age","value":10,"expression":"$lt"},{"property":"age","value":20,"expression":"$gt"}]}]"""
     val params = Map("$page" -> "1", "$offset" -> "10", "$limit" -> "5", "$sort" -> $sort, "$filter" -> $filter)
-    RequestHelper.getSearch(params)
+    val search = RequestHelper.getSearch(params)
+    println(search)
+    Assert.assertEquals(Some(5), search.limit)
   }
-  
-  
+
   @Test
   def testE() {
     println(Query.Order.DESC.toString())
