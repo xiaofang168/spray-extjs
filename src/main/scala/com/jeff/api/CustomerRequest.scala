@@ -7,6 +7,7 @@ import scala.concurrent.duration._
 import spray.httpx.Json4sSupport
 import spray.routing.RequestContext
 import org.json4s.DefaultFormats
+import com.jeff.entities.ResponseSearch
 
 /**
  * Created by fangj on 2014/11/21.
@@ -26,6 +27,7 @@ trait CustomerRequest extends Actor with Json4sSupport {
   target ! requestMessage
 
   def receive = {
+    case response: ResponseSearch => complete(response)
     case e: AnyRef => complete(e)
   }
 
