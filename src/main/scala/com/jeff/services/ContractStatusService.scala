@@ -23,7 +23,6 @@ trait ContractStatusService extends BaseService {
   }
 
   def find(id: Option[Int], appName: Option[String], ip: Option[String], isEnable: Option[String]) = {
-
     db.withSession { implicit session =>
       Tables.Proxy.filteredBy(id) { _.id === id }
         .filteredBy(appName) { _.appName like appName.map("%" + _ + "%").getOrElse("") }
@@ -31,7 +30,16 @@ trait ContractStatusService extends BaseService {
     }
   }
 
-  def search(offset: Option[Int], limit: Option[Int], sort: Option[Array[Sort]], filter: Option[Array[Filter]]) = {
+  def count(filter: Option[Array[Filter]]): Int = {
+    db.withSession { implicit session =>
+      getFilterProxy(filter).query.length.run
+    }
+  }
+
+  /**
+   * 获取过滤后的Proxy
+   */
+  def getFilterProxy(filter: Option[Array[Filter]]) = {
 
     val (id, idExpression): (Option[Int], Option[Expression.Value]) = filter match {
       case Some(filter) => {
@@ -73,24 +81,27 @@ trait ContractStatusService extends BaseService {
       case None => (None, None)
     }
 
-    db.withSession { implicit session =>
-      Tables.Proxy.filteredBy(id) { _.id === id }
-        .filteredBy(appName) {
-          appNameExpression match {
-            case Some(Expression.EQ) => _.appName === appName
-            case Some(Expression.LIKE) => _.appName like appName.map("%" + _ + "%").getOrElse("")
-            case _ => _.appName === appName
-          }
-        }.filteredBy(ip) {
-          ipExpression match {
-            case Some(Expression.EQ) => _.ip === ip
-            case Some(Expression.LIKE) => _.ip like ip.map("%" + _ + "%").getOrElse("")
-            case _ => _.appName === ip
-          }
-        }.filteredBy(isEnable)(_.isEnable === isEnable)
-        .query.drop(offset.getOrElse(0)).take(limit.getOrElse(5)).list
-    }
+    Tables.Proxy.filteredBy(id) { _.id === id }
+      .filteredBy(appName) {
+        appNameExpression match {
+          case Some(Expression.EQ) => _.appName === appName
+          case Some(Expression.LIKE) => _.appName like appName.map("%" + _ + "%").getOrElse("")
+          case _ => _.appName === appName
+        }
+      }.filteredBy(ip) {
+        ipExpression match {
+          case Some(Expression.EQ) => _.ip === ip
+          case Some(Expression.LIKE) => _.ip like ip.map("%" + _ + "%").getOrElse("")
+          case _ => _.appName === ip
+        }
+      }.filteredBy(isEnable)(_.isEnable === isEnable)
 
+  }
+
+  def search(offset: Option[Int], limit: Option[Int], sort: Option[Array[Sort]], filter: Option[Array[Filter]]) = {
+    db.withSession { implicit session =>
+      getFilterProxy(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(5)).list
+    }
   }
 
   def update(proxy: Tables.ProxyRow) = {
