@@ -34,9 +34,10 @@ trait MyService extends HttpService {
   val contractStatusRoute = path("proxy") {
     get {
       respondWithMediaType(MediaTypes.`application/json`) {
-        parameterMap { conditions =>
+        parameterMap { params =>
           // 构造查询条件
-          handleContractStatusRequest(ContractStatusAction.All(null))
+          val search = RequestHelper.getSearch(params)
+          handleContractStatusRequest(ContractStatusAction.All(search))
         }
       }
     } ~
