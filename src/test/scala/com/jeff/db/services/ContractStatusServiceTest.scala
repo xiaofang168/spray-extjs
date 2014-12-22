@@ -77,7 +77,12 @@ class ContractStatusServiceTest {
       Tables.Proxy.filter(p => p.id >= 18 && p.appName === "app1").list
     }
     println(res)
+  }
 
+  @Test
+  def testOrder() {
+    val res = service.search(Some(0), Some(10), Some(Array[Sort](Sort("id",Order.ASC))), Some(Array[Filter](Filter("appName", "app1", Some(Expression.EQ)))))
+    println(res.size)
   }
 
   @Test
