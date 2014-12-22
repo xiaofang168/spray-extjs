@@ -81,6 +81,13 @@ class ContractStatusServiceTest {
   }
 
   @Test
+  def testCountProxy() {
+    val filter = Array[Filter](Filter("appName", "app1", Some(Expression.LIKE)), Filter("ip", "localhost", Some(Expression.EQ)))
+    val count = service.count(Some(filter))
+    println(count)
+  }
+
+  @Test
   def testSearchEq() {
     val res = service.search(Some(0), Some(10), Some(Array[Sort]()), Some(Array[Filter](Filter("appName", "app1", Some(Expression.EQ)))))
     println(res.size)
