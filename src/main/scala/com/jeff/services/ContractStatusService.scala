@@ -39,7 +39,7 @@ trait ContractStatusService extends BaseService {
   /**
    * 获取过滤后的Proxy
    */
-  def getFilterProxy(filter: Option[Array[Filter]]) = {
+  private def getFilterProxy(filter: Option[Array[Filter]]) = {
 
     val (id, idExpression): (Option[Int], Option[Expression.Value]) = filter match {
       case Some(filter) => {
@@ -100,7 +100,23 @@ trait ContractStatusService extends BaseService {
 
   def search(offset: Option[Int], limit: Option[Int], sort: Option[Array[Sort]], filter: Option[Array[Filter]]) = {
     db.withSession { implicit session =>
-      getFilterProxy(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(5)).list
+      val query = getFilterProxy(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(5))
+      sort match {
+        case Some(sort) => {
+          sort.foreach {
+            sortTuple =>
+              val (sortColumn, sortDirection) = (sortTuple.property, sortTuple.direction)
+              query.sortBy(sortColumn match {
+                case "id" => if (sortDirection == Order.DESC) _.id.desc else _.id.asc
+                case "appName" => if (sortDirection == Order.DESC) _.appName.desc else _.appName.asc
+                case "ip" => if (sortDirection == Order.DESC) _.ip.desc else _.ip.asc
+                case _ => if (sortDirection == Order.DESC) _.id.desc else _.id.asc
+              })
+          }
+        }
+        case None => query
+      }
+      query.list
     }
   }
 
