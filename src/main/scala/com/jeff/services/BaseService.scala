@@ -21,6 +21,12 @@ case class MaybeFilter[X, Y](val query: scala.slick.lifted.Query[X, Y, Seq]) {
   }
 }
 
+case class MaybeSort[X, Y](val query: scala.slick.lifted.Query[X, Y, Seq]) {
+  def sortedBy(op: Option[_])(f: (X) => scala.slick.lifted.Ordered) = {
+    op map { o => MaybeSort(query.sortBy(f)) } getOrElse { this }
+  }
+}
+
 private[services] trait BaseService {
   implicit def maybeFilterConversor[X, Y](q: scala.slick.lifted.Query[X, Y, Seq]) = new MaybeFilter(q)
   def db = new DBConnection(SlickDBDriver.getDriver).dbObject
