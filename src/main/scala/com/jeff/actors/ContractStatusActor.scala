@@ -4,6 +4,7 @@ import akka.actor.Actor
 import com.jeff.actions.ContractStatusAction
 import com.jeff.services.ContractStatusService
 import com.jeff.entities.Tables
+import com.jeff.entities.Query._
 
 /**
  * Created by fangj on 2014/11/21.
@@ -15,8 +16,7 @@ class ContractStatusActor extends Actor with ContractStatusService {
     case ContractStatusAction.Update(id, proxy) => sender ! update(proxy)
     case ContractStatusAction.Delete(id) => sender ! delete(id)
     case ContractStatusAction.Save(proxy) => sender ! save(proxy)
-    case ContractStatusAction.All(search) => sender ! all()
-
+    case ContractStatusAction.All(searchObj) => sender ! search(searchObj.offset, searchObj.limit, searchObj.sort, searchObj.filter)
   }
 
 }
