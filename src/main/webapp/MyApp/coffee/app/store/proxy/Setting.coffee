@@ -21,4 +21,5 @@ Ext.define 'MyApp.store.proxy.Setting',
 		#paramsAsJson: true
 		reader:
 			type: 'json'
-			rootProperty: 'users'
+			totalProperty: 'total'
+			rootProperty: 'results'
