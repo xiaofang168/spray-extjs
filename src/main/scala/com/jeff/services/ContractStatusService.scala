@@ -7,6 +7,7 @@ import com.jeff.entities.Query._
 import scala.slick.lifted.CanBeQueryCondition
 import scala.slick.lifted.Column
 import org.slf4j.LoggerFactory
+import com.jeff.Constant
 
 /**
  * 合同进程
@@ -98,25 +99,91 @@ trait ContractStatusService extends BaseService {
 
   }
 
-  def search(offset: Option[Int], limit: Option[Int], sort: Option[Array[Sort]], filter: Option[Array[Filter]]) = {
-    db.withSession { implicit session =>
-      val query = getFilterProxy(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(5))
-      sort match {
-        case Some(sort) => {
-          sort.foreach {
-            sortTuple =>
-              val (sortColumn, sortDirection) = (sortTuple.property, sortTuple.direction)
-              query.sortBy(sortColumn match {
-                case "id" => if (sortDirection == Order.DESC) _.id.desc else _.id.asc
-                case "appName" => if (sortDirection == Order.DESC) _.appName.desc else _.appName.asc
-                case "ip" => if (sortDirection == Order.DESC) _.ip.desc else _.ip.asc
-                case _ => if (sortDirection == Order.DESC) _.id.desc else _.id.asc
-              })
-          }
+  /**
+   * 排序
+   */
+  private def sort[X, Y](query: scala.slick.lifted.Query[com.jeff.entities.Tables.Proxy, Y, Seq], sort: Option[Array[Sort]]) = {
+
+    val (id, idOrder) = sort match {
+      case Some(sort) => {
+        sort.find(_.property.equals("id")) match {
+          case Some(sort) => (Some(sort.property), Some(sort.direction))
+          case None => (None, None)
         }
-        case None => query
       }
-      query.list
+      case None => (None, None)
+    }
+
+    val (appName, appNameOrder) = sort match {
+      case Some(sort) => {
+        sort.find(_.property.equals("appName")) match {
+          case Some(sort) => (Some(sort.property), Some(sort.direction))
+          case None => (None, None)
+        }
+      }
+      case None => (None, None)
+    }
+
+    val (ip, ipOrder) = sort match {
+      case Some(sort) => {
+        sort.find(_.property.equals("ip")) match {
+          case Some(sort) => (Some(sort.property), Some(sort.direction))
+          case None => (None, None)
+        }
+      }
+      case None => (None, None)
+    }
+
+    val (isEnable, isEnableOrder) = sort match {
+      case Some(sort) => {
+        sort.find(_.property.equals("isEnable")) match {
+          case Some(sort) => (Some(sort.property), Some(sort.direction))
+          case None => (None, None)
+        }
+      }
+      case None => (None, None)
+    }
+
+    query.sortedBy(id) {
+      idOrder match {
+        case Some(Order.ASC) => _.id.asc
+        case Some(Order.DESC) => _.id.desc
+        case _ => _.id.desc
+      }
+    }.sortedBy(appName) {
+      appNameOrder match {
+        case Some(Order.ASC) => _.appName.asc
+        case Some(Order.DESC) => _.appName.desc
+        case _ => _.appName.desc
+      }
+    }.sortedBy(ip) {
+      ipOrder match {
+        case Some(Order.ASC) => _.ip.asc
+        case Some(Order.DESC) => _.ip.desc
+        case _ => _.ip.desc
+      }
+    }.sortedBy(isEnable) {
+      isEnableOrder match {
+        case Some(Order.ASC) => _.isEnable.asc
+        case Some(Order.DESC) => _.isEnable.desc
+        case _ => _.isEnable.desc
+      }
+    }
+
+  }
+
+  def search(offset: Option[Int], limit: Option[Int], sort: Option[Array[Sort]], filter: Option[Array[Filter]]) = {
+    implicit class toQuery(query: scala.slick.lifted.Query[com.jeff.entities.Tables.Proxy, com.jeff.entities.Tables.Proxy#TableElementType, Seq]) {
+      def order(sort: Option[Array[Sort]]) = new ContractStatusService {}.sort(query, sort)
+    }
+    db.withSession { implicit session =>
+      getFilterProxy(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(Constant.PAGESIZE)).order(sort).query.list
+    }
+  }
+
+  def search(offset: Option[Int], limit: Option[Int], filter: Option[Array[Filter]]) = {
+    db.withSession { implicit session =>
+      getFilterProxy(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(Constant.PAGESIZE)).list
     }
   }
 
