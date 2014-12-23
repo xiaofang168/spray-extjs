@@ -8,6 +8,7 @@
 package com.jeff.api
 
 import com.jeff.entities.Query._
+import com.jeff.Constant
 
 /**
  * 请求帮助类
@@ -23,7 +24,7 @@ object RequestHelper {
 
     val page = params.getOrElse(RequestParams.page, "1")
     val offset = params.getOrElse(RequestParams.offset, "0")
-    val limit = params.getOrElse(RequestParams.limit, "5")
+    val limit = params.getOrElse(RequestParams.limit, Constant.PAGESIZE.toString)
     val sort = params.get(RequestParams.sort) match {
       case Some(s) => Some(JsonParser(s).convertTo[Array[Sort]])
       case None => None
