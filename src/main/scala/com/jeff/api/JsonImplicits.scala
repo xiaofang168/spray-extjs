@@ -37,7 +37,7 @@ object JsonImplicits extends DefaultJsonProtocol {
                   case Some(e) => if ("ASC".equals(e.toUpperCase())) Query.Order.ASC else Query.Order.DESC
                   case None => deserializationError("Sort expected")
                 }
-                Query.Sort(map("property"), Query.Order.DESC)
+                Query.Sort(map("property"), direction)
               }
           } toArray
         }
