@@ -164,4 +164,9 @@ class ContractStatusServiceTest {
     })
   }
 
+  @Test
+  def testExport() {
+    service.export()
+  }
+
 }
