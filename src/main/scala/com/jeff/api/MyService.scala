@@ -49,6 +49,13 @@ trait MyService extends HttpService {
         }
       }
   } ~
+    path("proxy" / "_export") {
+      get {
+        respondWithMediaType(MediaTypes.`application/excel`) {
+          handleContractStatusRequest(ContractStatusAction.Export)
+        }
+      }
+    } ~
     path("proxy" / Segment) { (id) =>
       get {
         respondWithMediaType(MediaTypes.`application/json`) {
