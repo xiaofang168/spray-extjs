@@ -7,6 +7,8 @@
  */
 package com.jeff.entities
 
+import com.jeff.Constant
+
 /**
  * @author: <a href="mailto:hbxffj@163.com">方杰</a>
  * @Date: 2014年12月17日 下午12:24:28
@@ -20,7 +22,7 @@ object Query extends {
 trait Query {
   case class Sort(property: String, direction: Order.Value)
   case class Filter(property: String, value: Any, expression: Option[Expression.Value])
-  case class Search(offset: Option[Int] = Some(0), limit: Option[Int] = Some(20), sort: Option[Array[Sort]] = Some(Array[Sort](Sort("id", Order.DESC))), filter: Option[Array[Filter]])
+  case class Search(offset: Option[Int] = Some(0), limit: Option[Int] = Some(Constant.PAGESIZE), sort: Option[Array[Sort]] = Some(Array[Sort](Sort("id", Order.DESC))), filter: Option[Array[Filter]])
   object Order extends Enumeration {
     val ASC, DESC = Value
   }
