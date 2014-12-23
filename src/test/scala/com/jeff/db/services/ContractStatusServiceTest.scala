@@ -81,7 +81,7 @@ class ContractStatusServiceTest {
 
   @Test
   def testOrder() {
-    val res = service.search(Some(0), Some(10), Some(Array[Sort](Sort("id",Order.ASC))), Some(Array[Filter](Filter("appName", "app1", Some(Expression.EQ)))))
+    val res = service.search(Some(0), Some(10), Some(Array[Sort](Sort("id", Order.ASC), Sort("appName", Order.DESC))), Some(Array[Filter](Filter("appName", "app1", Some(Expression.EQ)))))
     println(res.size)
   }
 
