@@ -37,6 +37,7 @@ libraryDependencies ++= {
     "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
     "org.eclipse.jetty" % "jetty-webapp" % "8.1.10.v20130312",
     "org.apache.poi" % "poi" % "3.11",
+    "joda-time" % "joda-time" % "2.6",
     "junit" % "junit" % "4.4" % "test"
   )
 }
