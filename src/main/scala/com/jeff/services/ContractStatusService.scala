@@ -26,6 +26,7 @@ import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.hssf.usermodel.HSSFFont
 import org.apache.poi.hssf.usermodel.HSSFCellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
+import java.io.ByteArrayOutputStream
 
 /**
  * 合同进程
@@ -238,14 +239,15 @@ trait ContractStatusService extends BaseService {
   /**
    * 导出所有的记录
    */
-  def export() = {
-    
+  def export(): Array[Byte] = {
+
     val heads = Array("序号", "月份", "出口合同签订日", "出口合同号", "合同状态", "客户方", "国别", "合同产品", "出口合同金额（USD)", "结算方式", "", "运输方式及箱型", "采购合同号", "采购合同金额(RMB)", "合同进展", "预计出厂日", "预计发货日", "预计到港日", "是否已到款", "备注")
-    val out = new FileOutputStream("workbook.xls");
-    
+
+    val baos = new ByteArrayOutputStream()
+
     val wb = new HSSFWorkbook()
     val sheet = wb.createSheet()
-    
+
     val format = wb.createDataFormat()
     // 合并单元格(构造模板格式)
     sheet.addMergedRegion(CellRangeAddress.valueOf("A1:T1"))
@@ -330,7 +332,7 @@ trait ContractStatusService extends BaseService {
     dateColumnStyle.setTopBorderColor(IndexedColors.BLACK.getIndex())
     dateColumnStyle.setAlignment(CellStyle.ALIGN_CENTER)
     dateColumnStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER)
-    dateColumnStyle.setDataFormat(format.getFormat("yyyy-MM-dd"));
+    dateColumnStyle.setDataFormat(format.getFormat("yyyy-MM-dd"))
 
     val titleRow = sheet.createRow(0)
     titleRow.setHeightInPoints((3 * sheet.getDefaultRowHeightInPoints()))
@@ -422,9 +424,9 @@ trait ContractStatusService extends BaseService {
       sheet.addMergedRegion(CellRangeAddress.valueOf(s"B${startNum}:B${startNum + count - 1}"))
     }
 
-    wb.write(out)
-    out.close()
-    
+    wb.write(baos)
+    baos.toByteArray()
+
   }
 
 }
