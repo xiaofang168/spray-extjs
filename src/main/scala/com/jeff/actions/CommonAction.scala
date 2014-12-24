@@ -15,4 +15,6 @@ private[actions] trait CommonAction {
 
   case class All(search: Search) extends RequestMessage
 
+  case object Export extends RequestMessage
+
 }
