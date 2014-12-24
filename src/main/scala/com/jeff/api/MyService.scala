@@ -56,7 +56,7 @@ trait MyService extends HttpService {
     path("proxy" / "_export") {
       get {
         respondWithMediaType(MediaTypes.`application/excel`) {
-          respondWithHeader(HttpHeaders.`Content-Disposition`("attachment", Map(("filename", "aa.xls")))) {
+          respondWithHeader(HttpHeaders.`Content-Disposition`("attachment", Map(("filename", new String("出口合同进程表.xls".getBytes("GBK"), "ISO8859_1"))))) {
             handleDownRequest(ContractStatusAction.Export)
           }
         }
