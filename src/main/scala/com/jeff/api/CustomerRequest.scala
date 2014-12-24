@@ -1,7 +1,6 @@
 package com.jeff.api
 
 import akka.actor.{ OneForOneStrategy, ActorRef, Props, Actor }
-import com.jeff.api.CustomerRequest.WithProps
 import akka.actor.SupervisorStrategy.Stop
 import scala.concurrent.duration._
 import spray.httpx.Json4sSupport
@@ -46,18 +45,47 @@ trait CustomerRequest extends Actor with Json4sSupport {
 
 }
 
-object CustomerRequest {
+case class WithProps(requestContext: RequestContext, props: Props, requestMessage: RequestMessage) extends CustomerRequest {
+  lazy val target = context.actorOf(props)
 
-  case class WithProps(requestContext: RequestContext, props: Props, requestMessage: RequestMessage) extends CustomerRequest {
-    lazy val target = context.actorOf(props)
-
-    implicit def json4sFormats = DefaultFormats
-  }
-
+  implicit def json4sFormats = DefaultFormats
 }
 
 trait CustomerRequestCreator {
   this: Actor =>
   def customerRequest(requestContext: RequestContext, props: Props, requestMessage: RequestMessage) =
     context.actorOf(Props(new WithProps(requestContext, props, requestMessage)))
+}
+
+trait CustomerDownRequest extends Actor {
+
+  import context._
+
+  def requestContext: RequestContext
+
+  def target: ActorRef
+
+  def requestMessage: RequestMessage
+
+  setReceiveTimeout(5.seconds)
+
+  target ! requestMessage
+
+  def receive = {
+    case bytes: Array[Byte] => {
+      requestContext.complete(bytes)
+      stop(self)
+    }
+  }
+
+}
+
+case class DownWithProps(requestContext: RequestContext, props: Props, requestMessage: RequestMessage) extends CustomerDownRequest {
+  lazy val target = context.actorOf(props)
+}
+
+trait CustomerDownRequestCreator {
+  this: Actor =>
+  def customerDownRequest(requestContext: RequestContext, props: Props, requestMessage: RequestMessage) =
+    context.actorOf(Props(new DownWithProps(requestContext, props, requestMessage)))
 }
