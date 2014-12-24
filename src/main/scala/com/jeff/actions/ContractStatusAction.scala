@@ -12,7 +12,5 @@ object ContractStatusAction extends CommonAction {
   case class Update(id: Int, proxy: Tables.ProxyRow) extends RequestMessage
 
   case class Save(proxy: Tables.ProxyRow) extends RequestMessage
-  
-  case object Export extends RequestMessage
 
 }
