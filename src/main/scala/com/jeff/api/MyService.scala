@@ -6,10 +6,11 @@ import com.jeff.actors.ContractStatusActor
 import spray.routing._
 import spray.http._
 import com.jeff.entities.Tables
+import com.jeff.actors.CommonActor
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
-class MyServiceActor extends Actor with MyService with CustomerRequestCreator {
+class MyServiceActor extends Actor with MyService with CustomerRequestCreator with CustomerDownRequestCreator {
 
   // the HttpService trait defines only one abstract member, which
   // connects the services environment to the enclosing actor or test
@@ -22,6 +23,9 @@ class MyServiceActor extends Actor with MyService with CustomerRequestCreator {
 
   def handleContractStatusRequest(requsetMessage: RequestMessage): Route =
     ctx => customerRequest(ctx, Props[ContractStatusActor], requsetMessage)
+
+  def handleDownRequest(requsetMessage: RequestMessage): Route =
+    ctx => customerDownRequest(ctx, Props[CommonActor], requsetMessage)
 }
 
 // this trait defines our service behavior independently from the service actor
@@ -52,7 +56,9 @@ trait MyService extends HttpService {
     path("proxy" / "_export") {
       get {
         respondWithMediaType(MediaTypes.`application/excel`) {
-          handleContractStatusRequest(ContractStatusAction.Export)
+          respondWithHeader(HttpHeaders.`Content-Disposition`("attachment", Map(("filename", "aa.xls")))) {
+            handleDownRequest(ContractStatusAction.Export)
+          }
         }
       }
     } ~
@@ -75,6 +81,8 @@ trait MyService extends HttpService {
           }
         }
     }
+
+  def handleDownRequest(requsetMessage: RequestMessage): Route
 
   def handleContractStatusRequest(requsetMessage: RequestMessage): Route
 
