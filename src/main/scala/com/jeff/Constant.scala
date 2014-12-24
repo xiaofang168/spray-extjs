@@ -27,7 +27,7 @@ object Constant {
   /**请求超时时间*/
   val requestTimeout = config.getInt("sp.request-timeout")
   /**分页大小*/
-  val PAGESIZE = config.getInt("page-size")
+  val PAGESIZE = config.getInt("sp.page-size")
   /**应用名称(连接服务访问名称),默认为dbproxy*/
   val appName: String = config.getString("sp.name")
 
