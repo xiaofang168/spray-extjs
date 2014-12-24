@@ -17,7 +17,6 @@ class ContractStatusActor extends Actor with ContractStatusService {
     case ContractStatusAction.Update(id, proxy) => sender ! update(proxy)
     case ContractStatusAction.Delete(id) => sender ! delete(id)
     case ContractStatusAction.Save(proxy) => sender ! save(proxy)
-    case ContractStatusAction.Export => sender ! export
     case ContractStatusAction.All(searchObj) => {
       val total = count(searchObj.filter)
       val list = search(searchObj.offset, searchObj.limit, searchObj.sort, searchObj.filter)
