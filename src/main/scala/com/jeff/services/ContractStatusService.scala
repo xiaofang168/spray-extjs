@@ -150,6 +150,16 @@ trait ContractStatusService extends BaseService {
       case None => (None, None)
     }
 
+    val (exportContractMoney, exportContractMoneyOrder) = sort match {
+      case Some(exportContractMoney) => {
+        exportContractMoney.find(_.property.equals("exportContractMoney")) match {
+          case Some(exportContractMoney) => (Some(exportContractMoney.property), Some(exportContractMoney.direction))
+          case None => (None, None)
+        }
+      }
+      case None => (None, None)
+    }
+
     query.sortedBy(id) {
       idOrder match {
         case Some(Order.ASC) => _.id.asc
@@ -173,6 +183,12 @@ trait ContractStatusService extends BaseService {
         case Some(Order.ASC) => _.contractStatus.asc
         case Some(Order.DESC) => _.contractStatus.desc
         case _ => _.contractStatus.desc
+      }
+    }.sortedBy(exportContractMoney) {
+      exportContractMoneyOrder match {
+        case Some(Order.ASC) => _.exportContractMoney.asc
+        case Some(Order.DESC) => _.exportContractMoney.desc
+        case _ => _.exportContractMoney.desc
       }
     }
 
