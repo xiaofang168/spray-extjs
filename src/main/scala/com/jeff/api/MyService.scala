@@ -7,6 +7,8 @@ import spray.routing._
 import spray.http._
 import com.jeff.entities.Tables
 import com.jeff.actors.DownLoadActor
+import java.text.SimpleDateFormat
+import java.util.Date
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
@@ -56,7 +58,10 @@ trait MyService extends HttpService {
     path("proxy" / "_export") {
       get {
         respondWithMediaType(MediaTypes.`application/excel`) {
-          respondWithHeader(HttpHeaders.`Content-Disposition`("attachment", Map(("filename", new String("出口合同进程表.xls".getBytes("GBK"), "ISO8859_1"))))) {
+          val dateFormatter = new SimpleDateFormat("yyyyMMdd")
+          val dateStr = dateFormatter.format(new Date)
+          val fileName = new String(s"出口合同进程表${dateStr}.xls".getBytes("GBK"), "ISO8859_1")
+          respondWithHeader(HttpHeaders.`Content-Disposition`("attachment", Map(("filename", fileName)))) {
             handleDownRequest(ContractStatusAction.Export)
           }
         }
