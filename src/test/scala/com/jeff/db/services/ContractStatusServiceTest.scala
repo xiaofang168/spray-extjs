@@ -72,7 +72,7 @@ class ContractStatusServiceTest {
 
   @Test
   def testSaveProxy() {
-    val contract = Tables.ExportContractProgressRow(5, Option("一月"), Option("2013-11-13"), Option("MSC-USA-13E01"))
+    val contract = Tables.ExportContractProgressRow(5, Option("一月"), Option("2013-11-13"), Some("MSC-USA-13E01"), Some("进行中"), Some("张三"), Some("美国"), Some("A"), Some("13.09"))
     val res = db.withSession { implicit session =>
       Tables.ExportContractProgress.insertOrUpdate(contract)
     }
