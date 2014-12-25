@@ -9,19 +9,18 @@
 			expanded : true
 			description : ''
 			items : [
-				text : '进度跟踪'
+				text : '出口合同进程管理'
 				module : 'Global'
 				iconCls : 'fa fa-list'
 				glyph: 0xf03a
-				view:'proxylist'
-			,
-				text : '合同管理'
-				module : 'Project'
-				iconCls : 'fa fa-search'
-				glyph: 0xf002
-				view: 'proxysearch'
-		    ]
-
+				view:'contractlist'
+			#,
+			#	text : '合同管理'
+			#	module : 'Project'
+			#	iconCls : 'fa fa-search'
+			#	glyph: 0xf002
+			#	view: 'proxysearch'
+			]
 		]
 	getMenus : ->
 		items = []
