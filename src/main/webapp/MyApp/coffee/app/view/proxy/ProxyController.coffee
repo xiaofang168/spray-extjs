@@ -109,3 +109,6 @@ Ext.define 'MyApp.view.proxy.ProxyController',
 			closable : true	
 			draggable: true
 		proxydetailwin.show()
+	
+	exportExcel: ->
+		window.location.href = "#{MyApp.context}app/proxy/_export" 
