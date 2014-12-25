@@ -3,6 +3,7 @@ Ext.define 'MyApp.view.main.MainController',
 	requires: [
 		'Ext.MessageBox'
 		'MyApp.view.proxy.List'
+		'MyApp.view.contract.List'
 	]
 	alias: 'controller.main'
 	onClickButton: ->
