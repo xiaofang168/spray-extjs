@@ -21,6 +21,7 @@ object JsonImplicits extends DefaultJsonProtocol {
   import DefaultJsonProtocol._
 
   implicit val impProxyRow = jsonFormat4(Tables.ProxyRow)
+  implicit val impExportContractProgressRow = jsonFormat20(Tables.ExportContractProgressRow)
 
   implicit object sortJsonFormat extends RootJsonFormat[Array[Query.Sort]] {
 

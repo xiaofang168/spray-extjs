@@ -9,10 +9,12 @@ import com.jeff.entities.Tables
 import com.jeff.actors.DownLoadActor
 import java.text.SimpleDateFormat
 import java.util.Date
+import com.jeff.actors.ProxyActor
+import com.jeff.actions.ProxyAction
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
-class MyServiceActor extends Actor with MyService with CustomerRequestCreator with CustomerDownRequestCreator {
+class MyServiceActor extends Actor with MyService with ContractServiceRoute with CustomerRequestCreator with CustomerDownRequestCreator {
 
   // the HttpService trait defines only one abstract member, which
   // connects the services environment to the enclosing actor or test
@@ -21,12 +23,18 @@ class MyServiceActor extends Actor with MyService with CustomerRequestCreator wi
   // this actor only runs our route, but you could add
   // other things here, like request stream processing
   // or timeout handling
-  def receive = runRoute(contractStatusRoute)
+  def receive = runRoute(proxyRoute ~ contractStatusRoute)
+
+  def handleProxyRequest(requsetMessage: RequestMessage): Route =
+    ctx => customerRequest(ctx, Props[ProxyActor], requsetMessage)
+
+  def handleDownProxyRequest(requsetMessage: RequestMessage): Route =
+    ctx => customerDownRequest(ctx, Props[DownLoadActor], requsetMessage)
 
   def handleContractStatusRequest(requsetMessage: RequestMessage): Route =
     ctx => customerRequest(ctx, Props[ContractStatusActor], requsetMessage)
 
-  def handleDownRequest(requsetMessage: RequestMessage): Route =
+  def handleDownContractRequest(requsetMessage: RequestMessage): Route =
     ctx => customerDownRequest(ctx, Props[DownLoadActor], requsetMessage)
 }
 
@@ -37,20 +45,20 @@ trait MyService extends HttpService {
   import spray.httpx.SprayJsonSupport.sprayJsonUnmarshaller
 
   // 合同进程路由定义
-  val contractStatusRoute = path("proxy") {
+  val proxyRoute = path("proxy") {
     get {
       respondWithMediaType(MediaTypes.`application/json`) {
         parameterMap { params =>
           // 构造查询条件
           val search = RequestHelper.getSearch(params)
-          handleContractStatusRequest(ContractStatusAction.All(search))
+          handleProxyRequest(ContractStatusAction.All(search))
         }
       }
     } ~
       post {
         respondWithMediaType(MediaTypes.`application/json`) {
           entity(as[Tables.ProxyRow]) { proxy =>
-            handleContractStatusRequest(ContractStatusAction.Save(proxy))
+            handleProxyRequest(ProxyAction.Save(proxy))
           }
         }
       }
@@ -62,7 +70,7 @@ trait MyService extends HttpService {
           val dateStr = dateFormatter.format(new Date)
           val fileName = new String(s"出口合同进程表${dateStr}.xls".getBytes("GBK"), "ISO8859_1")
           respondWithHeader(HttpHeaders.`Content-Disposition`("attachment", Map(("filename", fileName)))) {
-            handleDownRequest(ContractStatusAction.Export)
+            handleDownProxyRequest(ProxyAction.Export)
           }
         }
       }
@@ -70,25 +78,25 @@ trait MyService extends HttpService {
     path("proxy" / Segment) { (id) =>
       get {
         respondWithMediaType(MediaTypes.`application/json`) {
-          handleContractStatusRequest(ContractStatusAction.Get(id.toInt))
+          handleProxyRequest(ProxyAction.Get(id.toInt))
         }
       } ~
         put {
           respondWithMediaType(MediaTypes.`application/json`) {
             entity(as[Tables.ProxyRow]) { proxy =>
-              handleContractStatusRequest(ContractStatusAction.Update(id.toInt, proxy))
+              handleProxyRequest(ProxyAction.Update(id.toInt, proxy))
             }
           }
         } ~
         delete {
           respondWithMediaType(MediaTypes.`application/json`) {
-            handleContractStatusRequest(ContractStatusAction.Delete(id.toInt))
+            handleProxyRequest(ProxyAction.Delete(id.toInt))
           }
         }
     }
 
-  def handleDownRequest(requsetMessage: RequestMessage): Route
+  def handleProxyRequest(requsetMessage: RequestMessage): Route
 
-  def handleContractStatusRequest(requsetMessage: RequestMessage): Route
+  def handleDownProxyRequest(requsetMessage: RequestMessage): Route
 
 }

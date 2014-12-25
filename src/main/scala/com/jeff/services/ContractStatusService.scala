@@ -38,28 +38,20 @@ trait ContractStatusService extends BaseService {
 
   def getById(id: Int) = {
     db.withSession { implicit session =>
-      Tables.Proxy.filter(_.id === id).first
-    }
-  }
-
-  def find(id: Option[Int], appName: Option[String], ip: Option[String], isEnable: Option[String]) = {
-    db.withSession { implicit session =>
-      Tables.Proxy.filteredBy(id) { _.id === id }
-        .filteredBy(appName) { _.appName like appName.map("%" + _ + "%").getOrElse("") }
-        .query.list
+      Tables.ExportContractProgress.filter(_.id === id).first
     }
   }
 
   def count(filter: Option[Array[Filter]]): Int = {
     db.withSession { implicit session =>
-      getFilterProxy(filter).query.length.run
+      getFilter(filter).query.length.run
     }
   }
 
   /**
    * 获取过滤后的Proxy
    */
-  private def getFilterProxy(filter: Option[Array[Filter]]) = {
+  private def getFilter(filter: Option[Array[Filter]]) = {
 
     val (id, idExpression): (Option[Int], Option[Expression.Value]) = filter match {
       case Some(filter) => {
@@ -71,9 +63,9 @@ trait ContractStatusService extends BaseService {
       case None => (None, None)
     }
 
-    val (appName, appNameExpression): (Option[String], Option[Expression.Value]) = filter match {
+    val (month, monthExpression): (Option[String], Option[Expression.Value]) = filter match {
       case Some(filter) => {
-        filter.find(_.property.equals("appName")) match {
+        filter.find(_.property.equals("month")) match {
           case Some(filter) => (Some(filter.value.toString), filter.expression)
           case None => (None, None)
         }
@@ -81,9 +73,9 @@ trait ContractStatusService extends BaseService {
       case None => (None, None)
     }
 
-    val (ip, ipExpression): (Option[String], Option[Expression.Value]) = filter match {
+    val (exportContractNum, exportContractNumExpression): (Option[String], Option[Expression.Value]) = filter match {
       case Some(filter) => {
-        filter.find(_.property.equals("ip")) match {
+        filter.find(_.property.equals("exportContractNum")) match {
           case Some(filter) => (Some(filter.value.toString), filter.expression)
           case None => (None, None)
         }
@@ -91,9 +83,9 @@ trait ContractStatusService extends BaseService {
       case None => (None, None)
     }
 
-    val (isEnable, isEnableExpression): (Option[String], Option[Expression.Value]) = filter match {
+    val (contractStatus, contractStatusExpression): (Option[String], Option[Expression.Value]) = filter match {
       case Some(filter) => {
-        filter.find(_.property.equals("isEnable")) match {
+        filter.find(_.property.equals("contractStatus")) match {
           case Some(filter) => (Some(filter.value.toString), filter.expression)
           case None => (None, None)
         }
@@ -101,27 +93,22 @@ trait ContractStatusService extends BaseService {
       case None => (None, None)
     }
 
-    Tables.Proxy.filteredBy(id) { _.id === id }
-      .filteredBy(appName) {
-        appNameExpression match {
-          case Some(Expression.EQ) => _.appName === appName
-          case Some(Expression.LIKE) => _.appName like appName.map("%" + _ + "%").getOrElse("")
-          case _ => _.appName === appName
+    Tables.ExportContractProgress.filteredBy(id) { _.id === id }
+      .filteredBy(month)(_.month === month)
+      .filteredBy(exportContractNum) {
+        exportContractNumExpression match {
+          case Some(Expression.EQ) => _.exportContractNum === exportContractNum
+          case Some(Expression.LIKE) => _.exportContractNum like exportContractNum.map("%" + _ + "%").getOrElse("")
+          case _ => _.exportContractNum === exportContractNum
         }
-      }.filteredBy(ip) {
-        ipExpression match {
-          case Some(Expression.EQ) => _.ip === ip
-          case Some(Expression.LIKE) => _.ip like ip.map("%" + _ + "%").getOrElse("")
-          case _ => _.appName === ip
-        }
-      }.filteredBy(isEnable)(_.isEnable === isEnable)
+      }.filteredBy(contractStatus)(_.contractStatus === contractStatus)
 
   }
 
   /**
    * 排序
    */
-  private def sort[X, Y](query: scala.slick.lifted.Query[com.jeff.entities.Tables.Proxy, Y, Seq], sort: Option[Array[Sort]]) = {
+  private def sort[X, Y](query: scala.slick.lifted.Query[com.jeff.entities.Tables.ExportContractProgress, Y, Seq], sort: Option[Array[Sort]]) = {
 
     val (id, idOrder) = sort match {
       case Some(sort) => {
@@ -133,30 +120,30 @@ trait ContractStatusService extends BaseService {
       case None => (None, None)
     }
 
-    val (appName, appNameOrder) = sort match {
-      case Some(sort) => {
-        sort.find(_.property.equals("appName")) match {
-          case Some(sort) => (Some(sort.property), Some(sort.direction))
+    val (month, monthOrder) = sort match {
+      case Some(month) => {
+        month.find(_.property.equals("month")) match {
+          case Some(month) => (Some(month.property), Some(month.direction))
           case None => (None, None)
         }
       }
       case None => (None, None)
     }
 
-    val (ip, ipOrder) = sort match {
-      case Some(sort) => {
-        sort.find(_.property.equals("ip")) match {
-          case Some(sort) => (Some(sort.property), Some(sort.direction))
+    val (exportContractNum, exportContractNumOrder) = sort match {
+      case Some(exportContractNum) => {
+        exportContractNum.find(_.property.equals("exportContractNum")) match {
+          case Some(exportContractNum) => (Some(exportContractNum.property), Some(exportContractNum.direction))
           case None => (None, None)
         }
       }
       case None => (None, None)
     }
 
-    val (isEnable, isEnableOrder) = sort match {
-      case Some(sort) => {
-        sort.find(_.property.equals("isEnable")) match {
-          case Some(sort) => (Some(sort.property), Some(sort.direction))
+    val (contractStatus, contractStatusOrder) = sort match {
+      case Some(contractStatus) => {
+        contractStatus.find(_.property.equals("contractStatus")) match {
+          case Some(contractStatus) => (Some(contractStatus.property), Some(contractStatus.direction))
           case None => (None, None)
         }
       }
@@ -169,70 +156,70 @@ trait ContractStatusService extends BaseService {
         case Some(Order.DESC) => _.id.desc
         case _ => _.id.desc
       }
-    }.sortedBy(appName) {
-      appNameOrder match {
-        case Some(Order.ASC) => _.appName.asc
-        case Some(Order.DESC) => _.appName.desc
-        case _ => _.appName.desc
+    }.sortedBy(month) {
+      monthOrder match {
+        case Some(Order.ASC) => _.month.asc
+        case Some(Order.DESC) => _.month.desc
+        case _ => _.month.desc
       }
-    }.sortedBy(ip) {
-      ipOrder match {
-        case Some(Order.ASC) => _.ip.asc
-        case Some(Order.DESC) => _.ip.desc
-        case _ => _.ip.desc
+    }.sortedBy(exportContractNum) {
+      exportContractNumOrder match {
+        case Some(Order.ASC) => _.exportContractNum.asc
+        case Some(Order.DESC) => _.exportContractNum.desc
+        case _ => _.exportContractNum.desc
       }
-    }.sortedBy(isEnable) {
-      isEnableOrder match {
-        case Some(Order.ASC) => _.isEnable.asc
-        case Some(Order.DESC) => _.isEnable.desc
-        case _ => _.isEnable.desc
+    }.sortedBy(contractStatus) {
+      contractStatusOrder match {
+        case Some(Order.ASC) => _.contractStatus.asc
+        case Some(Order.DESC) => _.contractStatus.desc
+        case _ => _.contractStatus.desc
       }
     }
 
   }
 
   def search(offset: Option[Int], limit: Option[Int], sort: Option[Array[Sort]], filter: Option[Array[Filter]]) = {
-    implicit class toQuery(query: scala.slick.lifted.Query[com.jeff.entities.Tables.Proxy, com.jeff.entities.Tables.Proxy#TableElementType, Seq]) {
+    implicit class toQuery(query: scala.slick.lifted.Query[com.jeff.entities.Tables.ExportContractProgress, com.jeff.entities.Tables.ExportContractProgress#TableElementType, Seq]) {
       def order(sort: Option[Array[Sort]]) = new ContractStatusService {}.sort(query, sort)
     }
     db.withSession { implicit session =>
-      getFilterProxy(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(Constant.PAGESIZE)).order(sort).query.list
+      getFilter(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(Constant.PAGESIZE)).order(sort).query.list
     }
   }
 
   def search(offset: Option[Int], limit: Option[Int], filter: Option[Array[Filter]]) = {
     db.withSession { implicit session =>
-      getFilterProxy(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(Constant.PAGESIZE)).list
+      getFilter(filter).query.drop(offset.getOrElse(0)).take(limit.getOrElse(Constant.PAGESIZE)).list
     }
   }
 
-  def update(proxy: Tables.ProxyRow) = {
+  def update(contract: Tables.ExportContractProgressRow) = {
     db.withSession { implicit session =>
-      Tables.Proxy.filter(_.id === proxy.id).update(proxy)
+      Tables.ExportContractProgress.filter(_.id === contract.id).update(contract)
     }
   }
 
   def delete(id: Int) = {
     db.withSession { implicit session =>
-      Tables.Proxy.filter(_.id === id).delete
+      Tables.ExportContractProgress.filter(_.id === id).delete
     }
   }
 
-  def save(proxy: Tables.ProxyRow): Int = {
+  def save(contract: Tables.ExportContractProgressRow): Int = {
     db.withSession { implicit session =>
-      Tables.Proxy.insert(proxy)
+      Tables.ExportContractProgress.insert(contract)
     }
   }
 
-  def saveOrUpdate(proxy: Tables.ProxyRow): Int = {
+  def saveOrUpdate(contract: Tables.ExportContractProgressRow): Int = {
     db.withSession { implicit session =>
-      Tables.Proxy.insertOrUpdate(proxy)
+      Tables.ExportContractProgress.insertOrUpdate(contract)
     }
   }
 
-  def all(): List[Tables.ProxyRow] = {
+  def all(): List[Tables.ExportContractProgressRow] = {
     db.withSession { implicit session =>
-      Tables.Proxy.list
+      Tables.ExportContractProgress.list
     }
   }
 
