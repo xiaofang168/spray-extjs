@@ -9,8 +9,8 @@ import com.jeff.entities.Tables
  */
 object ContractStatusAction extends CommonAction {
 
-  case class Update(id: Int, proxy: Tables.ProxyRow) extends RequestMessage
+  case class Update(id: Int, contract: Tables.ExportContractProgressRow) extends RequestMessage
 
-  case class Save(proxy: Tables.ProxyRow) extends RequestMessage
+  case class Save(contract: Tables.ExportContractProgressRow) extends RequestMessage
 
 }
