@@ -17,7 +17,7 @@ import com.jeff.services.ContractStatusService
  * @Date: 2014年12月24日 下午6:23:30
  * @version: $Rev$
  */
-class CommonActor extends Actor {
+class DownLoadActor extends Actor {
   def receive = {
     case ContractStatusAction.Export => sender ! new ContractStatusService {}.export
   }

@@ -6,7 +6,7 @@ import com.jeff.actors.ContractStatusActor
 import spray.routing._
 import spray.http._
 import com.jeff.entities.Tables
-import com.jeff.actors.CommonActor
+import com.jeff.actors.DownLoadActor
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
@@ -25,7 +25,7 @@ class MyServiceActor extends Actor with MyService with CustomerRequestCreator wi
     ctx => customerRequest(ctx, Props[ContractStatusActor], requsetMessage)
 
   def handleDownRequest(requsetMessage: RequestMessage): Route =
-    ctx => customerDownRequest(ctx, Props[CommonActor], requsetMessage)
+    ctx => customerDownRequest(ctx, Props[DownLoadActor], requsetMessage)
 }
 
 // this trait defines our service behavior independently from the service actor
