@@ -105,6 +105,6 @@ Ext.define 'MyApp.view.contract.List',
 				displayInfo: true
 			]
 			listeners:
-				cellclick: 'openDetails'
+				cellclick: 'show'
 		]
 		@callParent()
