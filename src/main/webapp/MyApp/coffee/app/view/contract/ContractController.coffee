@@ -68,7 +68,6 @@ Ext.define 'MyApp.view.contract.ContractController',
 						detailwin.getForm().setValues(store.data)
 						detailwin.show()
 
-
 	edit: (button)->
 		selectionModel = button.up('contractlist').down('gridpanel').getSelectionModel()
 		selectionModelSize = selectionModel.getSelection().length
