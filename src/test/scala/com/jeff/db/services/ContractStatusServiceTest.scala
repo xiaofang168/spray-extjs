@@ -71,7 +71,7 @@ class ContractStatusServiceTest {
   }
 
   @Test
-  def testSaveProxy() {
+  def testSaveContract() {
     val contract = Tables.ExportContractProgressRow(5, Option("一月"), Option("2013-11-13"), Some("MSC-USA-13E01"), Some("进行中"), Some("张三"), Some("美国"), Some("A"), Some("13.09"))
     val res = db.withSession { implicit session =>
       Tables.ExportContractProgress.insertOrUpdate(contract)
@@ -80,13 +80,20 @@ class ContractStatusServiceTest {
   }
 
   @Test
-  def testDeleteProxy() {
+  def testDeletes() {
+    val ids = Array(10, 11)
+    val res = service.delete(ids)
+    println(res)
+  }
+
+  @Test
+  def testDeleteContract() {
     val res = service.delete(5)
     println(res)
   }
 
   @Test
-  def testUpdateProxy() {
+  def testUpdateContract() {
     val contract = Tables.ExportContractProgressRow(5, Option("二月"), Option("2013-11-13"), Option("MSC-USA-13E01"))
     service.update(contract)
   }
