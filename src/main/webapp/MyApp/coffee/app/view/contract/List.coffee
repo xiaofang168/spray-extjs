@@ -1,5 +1,6 @@
 Ext.define 'MyApp.view.contract.List',
 	extend : 'Ext.panel.Panel'
+	id: 'contractlist'
 	requires: [
 		'Ext.grid.Panel'
 		'Ext.button.Button'
@@ -47,6 +48,9 @@ Ext.define 'MyApp.view.contract.List',
 		glyph: 0xf1c3
 		handler: 'exportExcel'
 	]
+	listeners:
+			close: (panel)->
+				panel.destroy()
 	initComponent: ->
 		contractstore = Ext.create('MyApp.store.contract.ExportContractProgress')
 		@items = [
