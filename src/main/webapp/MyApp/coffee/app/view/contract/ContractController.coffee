@@ -90,3 +90,28 @@ Ext.define 'MyApp.view.contract.ContractController',
 				success: (store) ->
 					editwin.getForm().setValues(store.data)
 			editwin.show()
+	
+	delete: ->
+		contractgrid = @lookupReference('contractgrid')
+		selectionModel = contractgrid.getSelectionModel()
+		selectionModelSize = selectionModel.getSelection().length
+		if selectionModelSize is 0
+			Ext.Msg.alert("提示", "请至少选择一条记录！")
+		else
+			deleteIds = []
+			for selection in selectionModel.getSelection()
+				deleteIds.push(selection.data.id)
+			idStr = deleteIds.join(",")
+			Ext.Msg.confirm '确认', '是否要删除选中的记录?', (choice)->
+				if choice is 'yes'
+					Ext.Ajax.request
+						url: "#{MyApp.context}app/contract/#{idStr}"
+						method: 'delete'
+						success: (response, opts) ->
+							#obj = Ext.decode(response.responseText)
+							contractgrid.getStore().reload()
+						failure: (response, opts) ->
+							console.log("server-side failure with status code #{response.status}")
+
+	exportExcel: ->
+		window.location.href = "#{MyApp.context}app/contract/_export" 
