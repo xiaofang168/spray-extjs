@@ -12,7 +12,7 @@
 				text : '出口合同进程管理'
 				module : 'Global'
 				iconCls : 'fa fa-list'
-				glyph: 0xf03a
+				glyph: 0xf02d
 				view:'contractlist'
 			#,
 			#	text : '合同管理'
