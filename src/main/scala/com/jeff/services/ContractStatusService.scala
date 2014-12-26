@@ -27,6 +27,8 @@ import org.apache.poi.hssf.usermodel.HSSFFont
 import org.apache.poi.hssf.usermodel.HSSFCellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 
 /**
  * 合同进程
@@ -221,6 +223,12 @@ trait ContractStatusService extends BaseService {
     }
   }
 
+  def delete(ids: Array[Int]) = {
+    db.withSession { implicit session =>
+      Tables.ExportContractProgress.filter(e => e.id.inSet(ids)).delete
+    }
+  }
+
   def save(contract: Tables.ExportContractProgressRow): Int = {
     db.withSession { implicit session =>
       Tables.ExportContractProgress.insert(contract)
@@ -371,24 +379,48 @@ trait ContractStatusService extends BaseService {
       }
     }
 
-    // 查询数据
-    val demoDatas = List(Array("3月", "20131113", "MSC-USA-13E01", "待出运", "THE FEDERAL GROUP", "美国", "GK0112 GASKET", "13478", "T/T", "", "海运 LCL", "200131113-1", "70140", "已订12月21日船", "20141213", "20141221", "", "已到100%", "代理出口合同"),
-      Array("3月", "20131113", "MSC-USA-13E01", "待出运", "THE FEDERAL GROUP", "美国", "GK0112 GASKET", "13478", "T/T", "", "海运 LCL", "200131113-1", "70140", "已订12月21日船", "20141213", "20141221", "", "已到100%", "代理出口合同"),
-      Array("3月", "20131113", "MSC-USA-13E01", "待出运", "THE FEDERAL GROUP", "美国", "GK0112 GASKET", "13478", "T/T", "", "海运 LCL", "200131113-1", "70140", "已订12月21日船", "20141213", "20141221", "", "已到100%", "代理出口合同"),
-      Array("4月", "20131113", "MSC-USA-13E01", "待出运", "THE FEDERAL GROUP", "美国", "GK0112 GASKET", "13478", "T/T", "", "海运 LCL", "200131113-1", "70140", "已订12月21日船", "20141213", "20141221", "", "已到100%", "代理出口合同"))
+    val contracts = db.withSession { implicit session =>
+      Tables.ExportContractProgress.sortBy(_.month.asc).list
+    }
+
+    val dateFormatter = new SimpleDateFormat("yyyy-MM-dd")
+    val defaultDateStr = dateFormatter.format(new Date)
+
+    val Datas = contracts.map {
+      e =>
+        Array(e.month.getOrElse(""),
+          e.exportContractDate.getOrElse(defaultDateStr),
+          e.exportContractNum.getOrElse(""),
+          e.contractStatus.getOrElse(""),
+          e.customer.getOrElse(""),
+          e.country.getOrElse("中国"),
+          e.product.getOrElse(""),
+          e.exportContractMoney.getOrElse("0"),
+          e.settlementWay.getOrElse(""),
+          e.latestDeliveryDate.getOrElse(""),
+          e.transportWay.getOrElse(""),
+          e.purchaseContractNum.getOrElse(""),
+          e.purchaseMoney.getOrElse("0"),
+          e.progressDescription.getOrElse(""),
+          e.planLeaveFactoryDate.getOrElse(defaultDateStr),
+          e.planSendDate.getOrElse(defaultDateStr),
+          e.planArrivalData.getOrElse(defaultDateStr),
+          e.payDescription.getOrElse(""),
+          e.comment.getOrElse(""))
+    }
 
     // 合并单元格的起始号
     var startNum = 4
     // 合并单元格的计数器
     var count = 0
     // 数据填充
-    demoDatas.zipWithIndex foreach { datas =>
+    Datas.zipWithIndex foreach { datas =>
       {
         val dataRow = sheet.createRow(3 + datas._2)
         count = count + 1
         val month = datas._1(0)
         // 取下一个月份(防止索引越界)
-        val nextMonth = if (datas._2 + 1 == demoDatas.size) month else demoDatas(datas._2 + 1)(0)
+        val nextMonth = if (datas._2 + 1 == Datas.size) month else Datas(datas._2 + 1)(0)
         dataRow.setHeightInPoints(20)
         val cell = dataRow.createCell(0)
         cell.setCellStyle(columnStyle)
@@ -411,10 +443,12 @@ trait ContractStatusService extends BaseService {
             }
           }
         }
-        if (!nextMonth.equals(month) && count > 1) {
-          // 合并单元格
-          sheet.addMergedRegion(CellRangeAddress.valueOf(s"B${startNum}:B${startNum + count - 1}"))
-          // 更改下一个合并的开始号
+        if (!nextMonth.equals(month)) {
+          if (count > 1) {
+            // 合并单元格
+            sheet.addMergedRegion(CellRangeAddress.valueOf(s"B${startNum}:B${startNum + count - 1}"))
+            // 更改下一个合并的开始号
+          }
           startNum = startNum + count
           // 重置计数器
           count = 0
