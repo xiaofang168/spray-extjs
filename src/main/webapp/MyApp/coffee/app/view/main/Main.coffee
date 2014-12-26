@@ -28,6 +28,11 @@ Ext.define 'MyApp.view.main.Main',
 			xtype: 'panel'
 			html: '<h2>Content appropriate for the current navigation.</h2>'
 		]
+	,
+		xtype: 'panel'
+		region: 'south'
+		height: 30
+		html : '<div style="text-align:center">技术支持：mailto:hbxffj@163.com</div>'
 	]
 	initComponent: ->
 		Ext.setGlyphFontFamily('FontAwesome')
