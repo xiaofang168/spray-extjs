@@ -58,21 +58,22 @@ trait ContractServiceRoute extends HttpService {
       }
     } ~
     path("contract" / Segment) { (id) =>
-      get {
+      val ids = id.split(",").map(_.toInt)
+      delete {
         respondWithMediaType(MediaTypes.`application/json`) {
-          handleContractStatusRequest(ContractStatusAction.Get(id.toInt))
+          handleContractStatusRequest(ContractStatusAction.Deletes(ids))
         }
       } ~
+        get {
+          respondWithMediaType(MediaTypes.`application/json`) {
+            handleContractStatusRequest(ContractStatusAction.Get(ids(0)))
+          }
+        } ~
         put {
           respondWithMediaType(MediaTypes.`application/json`) {
             entity(as[Tables.ExportContractProgressRow]) { contract =>
-              handleContractStatusRequest(ContractStatusAction.Update(id.toInt, contract))
+              handleContractStatusRequest(ContractStatusAction.Update(ids(0), contract))
             }
-          }
-        } ~
-        delete {
-          respondWithMediaType(MediaTypes.`application/json`) {
-            handleContractStatusRequest(ContractStatusAction.Delete(id.toInt))
           }
         }
     }
@@ -80,5 +81,5 @@ trait ContractServiceRoute extends HttpService {
   def handleContractStatusRequest(requsetMessage: RequestMessage): Route
 
   def handleDownContractRequest(requsetMessage: RequestMessage): Route
-  
+
 }
