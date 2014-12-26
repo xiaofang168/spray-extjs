@@ -16,6 +16,7 @@ class ContractStatusActor extends Actor with ContractStatusService {
     case ContractStatusAction.Get(id) => sender ! getById(id)
     case ContractStatusAction.Update(id, contract) => sender ! update(contract)
     case ContractStatusAction.Delete(id) => sender ! delete(id)
+    case ContractStatusAction.Deletes(ids) => sender ! delete(ids)
     case ContractStatusAction.Save(contract) => sender ! save(contract)
     case ContractStatusAction.All(searchObj) => {
       val total = count(searchObj.filter)
