@@ -5,8 +5,8 @@ Ext.define 'MyApp.view.contract.Add',
 	autoScroll: true  #自动创建滚动条
 	controller: 'contract'
 	title: '添加出口合同进程'
-	width: 800
-	height: 500
+	width: 900
+	height: 520
 	layout: 'form'
 	defaults:
 		xtype: 'container'
@@ -16,8 +16,8 @@ Ext.define 'MyApp.view.contract.Add',
 		labelSeparator :'：'#分隔符   
 		labelWidth: 120
 		labelAlign: 'right'
-		maxWidth: 300
-		width: 250
+		#maxWidth: 300
+		#width: 250
 		allowBlank : false #是否允许为空   
 		blankText : '不允许为空' 
 		flex: 1
@@ -59,6 +59,7 @@ Ext.define 'MyApp.view.contract.Add',
 		items: [
 			xtype: 'combo'
 			fieldLabel: '合同状态'
+			name: 'contractStatus'
 			store: new Ext.data.SimpleStore
 				data: [
 					['待出运', '待出运']
@@ -67,8 +68,8 @@ Ext.define 'MyApp.view.contract.Add',
 					['等待发货中', '等待发货中']
 					['采购中', '采购中']
 				]
-				fields: ['contractStatus', 'text']
-				valueField: 'contractStatus'
+				fields: ['value', 'text']
+				valueField: 'value'
 				displayField: 'text'
 		,
 			fieldLabel: '客户方'
@@ -85,6 +86,7 @@ Ext.define 'MyApp.view.contract.Add',
 			xtype: 'numberfield'
 			fieldLabel: '出口合同金额'
 			minValue: 0
+			allowExponential: false # disallow Exponential number notation
 			name:'exportContractMoney'
 		,
 			fieldLabel: '结算方式'
@@ -107,6 +109,7 @@ Ext.define 'MyApp.view.contract.Add',
 			xtype: 'numberfield'
 			fieldLabel: '采购合同金额'
 			minValue: 0
+			allowExponential: false
 			name:'purchaseMoney'
 		,
 			fieldLabel: '合同进展'
@@ -136,6 +139,7 @@ Ext.define 'MyApp.view.contract.Add',
 			fieldLabel: '备注'
 			maxWidth: 700
 			height: 50
+			allowBlank : true
 			name:'comment'
 		]
 	]
